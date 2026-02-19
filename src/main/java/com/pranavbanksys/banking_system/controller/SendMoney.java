@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SendMoney {
 
     private final SendMoneyService sendMoneyService;
-    private final UserDB userDB;
 
     //    receiverDetails needs email to send them the money, to get their details
     @PostMapping("/sendMoney")
