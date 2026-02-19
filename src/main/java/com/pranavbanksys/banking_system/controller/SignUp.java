@@ -18,7 +18,7 @@ public class SignUp {
 //  Used to get reference to the service layer, to use the registerUser method
     private final UserService userService;
 
-    @PostMapping("/signup")
+ @PostMapping("/signup")
 
 //    Returns either success if there is no same email in the DB, returns success and saves it
     public String signUp(@ModelAttribute UserDetails userDetails){

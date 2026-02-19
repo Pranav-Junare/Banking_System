@@ -37,7 +37,7 @@ public class UserService {
         UserDetails user = userDB.findByuEmail(email);
 
 //        If user=null, then not found in the DB
-        if(user==null) throw new IllegalStateException("No user found");
+        if(user==null) throw new IllegalStateException("No user notfound");
 
 //        If password does not match the entered password, then throw wrong password
         if(!user.getUPassword().equals(password)) throw new IllegalStateException("Wrong Password");
