@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class Login {
-//    Connection/Access to the User database
-    private final UserDB userDB;
 
 //    Connection/Access to the User Service to use the "loginUser" method
     private final UserService userService;
