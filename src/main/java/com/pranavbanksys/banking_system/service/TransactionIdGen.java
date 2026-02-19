@@ -15,7 +15,7 @@ public class TransactionIdGen {
     private final TransactionDB transactionDB;
 
 //    Returns the transactionDetails object where a unique transaction id is generated
-    public TransactionDetails createNewTransaction(TransactionDetails transaction){
+    public String createNewTransaction(){
 //        String where the randomly generated transactionID will be stored
         String randomID;
 
@@ -26,11 +26,9 @@ public class TransactionIdGen {
 //        check if the id is unique or not, if not again the do loop
         while(transactionDB.existsByTransactionID(randomID));
 
-//        Once a unique transaction id is generated, save the transactionID to randomId
-        transaction.setTransactionID(randomID);
 
 //        Returns the object where it saves the transaction with transactionID
-        return transactionDB.save(transaction);
+        return randomID;
     }
 
 //    Method to generate the unique transactionID

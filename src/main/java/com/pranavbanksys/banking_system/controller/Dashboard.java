@@ -1,9 +1,12 @@
 package com.pranavbanksys.banking_system.controller;
 
+import com.pranavbanksys.banking_system.repo.TransactionDetails;
 import com.pranavbanksys.banking_system.repo.UserDetails;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 @RestController
 public class Dashboard {
@@ -26,4 +29,5 @@ public class Dashboard {
             return "Welcome "+user.getUName()+"\n"+"Account balance is ₹"+user.getAccountBalance();
         }
     }
+
 }
