@@ -1,13 +1,16 @@
 package com.pranavbanksys.banking_system.controller;
 
-import com.pranavbanksys.banking_system.repo.UserDB;
 import com.pranavbanksys.banking_system.repo.UserDetails;
 import com.pranavbanksys.banking_system.service.SendMoneyService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class SendMoney {
 
     //    receiverDetails needs email to send them the money, to get their details
     @PostMapping("/sendMoney")
-    public String moneyTransfer(@ModelAttribute UserDetails receiverDetails,int sendAmount, HttpSession session){
+    public ResponseEntity<?> moneyTransfer(@ModelAttribute UserDetails receiverDetails, int sendAmount, HttpSession session){
         try{
 
 //            Using the session we created with the user, taki wahi jho login kiya hai uski details mile
@@ -34,13 +37,17 @@ public class SendMoney {
             sendMoneyService.processTransaction(sender, receiver, sendAmount);
 
 //            Ye bas show karega ke the transaction has worked and kita balance hai vo show karega
-            return "Amount of ₹"+sendAmount+" sent successfully from "+sender.getUName()+" to "+receiver.getUName()+", current "+sender.getUName()+" has a balance of "+sender.getAccountBalance()+" and "+receiver.getUName()+" has a balance of "+receiver.getAccountBalance();
+            return  ResponseEntity.ok(Map.of(
+                    "sendAmount", sendAmount,
+                    "senderName",sender.getUName(),
+                    "receiverName",receiver.getUName()
 
+            ));
         }
 
 //        If error aata hai on 32,
         catch(IllegalStateException e){
-            return e.getMessage();
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error",e.getMessage()));
         }
     }
 }

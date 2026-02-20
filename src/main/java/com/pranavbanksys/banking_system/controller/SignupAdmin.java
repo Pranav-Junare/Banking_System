@@ -3,9 +3,13 @@ package com.pranavbanksys.banking_system.controller;
 import com.pranavbanksys.banking_system.repo.AdminDetails;
 import com.pranavbanksys.banking_system.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,13 +17,13 @@ public class SignupAdmin {
     private final AdminService adminService;
 
     @PostMapping("/signupAdmin")
-    public String signup(@ModelAttribute AdminDetails adminDetails){
+    public ResponseEntity<?> signup(@ModelAttribute AdminDetails adminDetails){
         try{
             adminService.registerAdmin(adminDetails);
-            return "Signup successfully";
+            return ResponseEntity.ok(Map.of("message","Admin signed in successfully"));
         }
         catch(IllegalStateException e){
-            return e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
 }
