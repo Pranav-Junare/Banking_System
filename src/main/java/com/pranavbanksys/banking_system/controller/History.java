@@ -54,7 +54,7 @@ public class History {
             String receiverName=(receiverDetails!=null)?receiverDetails.getUName():"Unknown User";
 
 //            Gives the history in string format
-            stringBuilder.append("ID: ").append(transactionDetails.getTransactionID()).append("\n")
+            stringBuilder.append("Transaction ID: ").append(transactionDetails.getTransactionID()).append("\n")
                     .append("Sent to: ").append(receiverName).append("\n")
                     .append("Amount: ₹").append(transactionDetails.getAmount()).append("\n")
                     .append("------------------------------------------------------------\n");
