@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -20,16 +21,25 @@ public class Login {
 //    Connection/Access to the User Service to use the "loginUser" method
     private final UserService userService;
 
+//    Return responseEntity. Request used is a map of string, string and used @RequestBody instead of ModelAttribute so it can read json
     @PostMapping("/login")
-//    For now returns a string, used to create a session also, so that the user need not do anything
-    public ResponseEntity<?> login(@ModelAttribute UserDetails userDetails, HttpSession session){
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials, HttpSession session){
         try{
-        UserDetails user=userService.loginUser(userDetails.getUEmail(), userDetails.getUPassword());
-        session.setAttribute("currentUser",user);
-        return ResponseEntity.ok(Map.of("success","Logged in successfully"));
+//            Name sent by react
+            String email=credentials.get("email");
+            String password=credentials.get("password");
+
+//            Performs the necessary check annd logs in user
+            UserDetails user=userService.loginUser(email, password);
+
+//            Set the session
+            session.setAttribute("currentUser",user);
+
+//            Return the name to react, used to show welcome name
+            return ResponseEntity.ok(Map.of("name",user.getUName()));
         }
         catch(IllegalStateException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error",e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error",e.getMessage()));
         }
     }
 }

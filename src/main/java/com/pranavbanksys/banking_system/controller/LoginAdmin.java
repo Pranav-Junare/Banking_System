@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -22,11 +23,13 @@ public class LoginAdmin {
     private final AdminService adminService;
 
     @PostMapping("/loginAdmin")
-    public ResponseEntity<?> loginAdmin(@ModelAttribute AdminDetails adminDetails, HttpSession session){
+    public ResponseEntity<?> loginAdmin(@RequestBody Map<String, String>credentials, HttpSession session){
         try{
-        AdminDetails admin= adminService.logAdmin(adminDetails.getAEmail(),adminDetails.getAPassword());
-        session.setAttribute("currentAdmin",admin);
-        return ResponseEntity.ok(Map.of("adminName",admin.getAName()));
+            String aEmail=credentials.get("email");
+            String aPassword=credentials.get("password");
+            AdminDetails admin= adminService.logAdmin(aEmail,aPassword);
+            session.setAttribute("currentAdmin",admin);
+            return ResponseEntity.ok(Map.of("adminName",admin.getAName()));
         }
         catch(IllegalStateException e){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error",e.getMessage()));

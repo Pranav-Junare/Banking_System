@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -23,7 +24,7 @@ public class SignUp {
  @PostMapping("/signup")
 
 //    Returns either success if there is no same email in the DB, returns success and saves it
-    public  ResponseEntity<?> signUp(@ModelAttribute UserDetails userDetails){
+    public  ResponseEntity<?> signUp(@RequestBody UserDetails userDetails){
 
 //        Runs the registerUser from userService
         try{userService.registerUser(userDetails);
