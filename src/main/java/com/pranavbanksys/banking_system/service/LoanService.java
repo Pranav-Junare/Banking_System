@@ -33,7 +33,6 @@ public class LoanService {
         return user;
     }
 
-<<<<<<< HEAD
     // Moved applyForLoan outside of getUser() to be properly defined
     @Transactional
     public void applyForLoan(String accountEmail, String loanType, int amount, int tenure) {
@@ -83,7 +82,6 @@ public class LoanService {
             default:
                 return 12; // Default rate for any other type
         }
-=======
     @Transactional
     public void applyForLoan(String accountEmail, String loanType, int amount, int tenure) {
         // Fetch the user to apply the loan amount to their balance
@@ -143,6 +141,5 @@ public class LoanService {
             case "PERSONAL" -> 14; // 14% interest
             default -> 12; // Default rate for any other type
         };
->>>>>>> 160e0db9b93620fc636f908f443e645bc59f951a
     }
 }
