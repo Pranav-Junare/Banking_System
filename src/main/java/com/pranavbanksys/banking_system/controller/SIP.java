@@ -1,6 +1,7 @@
 package com.pranavbanksys.banking_system.controller;
+
 import com.pranavbanksys.banking_system.repo.UserDetails;
-import com.pranavbanksys.banking_system.service.FixedDeposit_Service;
+import com.pranavbanksys.banking_system.service.SIP_Service; // FIXED: Imported correct service
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class SIP {
-    private final SIP_Service sipService;
+
+    private final SIP_Service sipService; // Now matches the correct service
+
     @PostMapping("/create-sip")
-    public ResponseEntity<?> createSIP(@RequestBody SIPRequest request, HttpSession session)
-    {
+    public ResponseEntity<?> createSIP(@RequestBody SIPRequest request, HttpSession session) {
         try {
             // Authenticate via Session
             Object ses = session.getAttribute("currentUser");
@@ -31,7 +34,7 @@ public class SIP {
                     request.getSipDuration()
             );
 
-           // Return success message as JSON
+            // Return success message as JSON
             return ResponseEntity.ok(Map.of("message", "SIP created successfully"));
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -56,6 +59,7 @@ public class SIP {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
     // DTO for SIP creation request
     @Data
     static class SIPRequest {

@@ -1,14 +1,22 @@
 package com.pranavbanksys.banking_system.repo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Data
 @Table(name = "sip_details")
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class SIP_Details {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String accountHolderName;
     private String accountEmail;
     private String sipType;
     private Double sipAmount;
