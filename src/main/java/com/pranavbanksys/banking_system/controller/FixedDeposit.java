@@ -2,7 +2,6 @@ package com.pranavbanksys.banking_system.controller;
 
 import com.pranavbanksys.banking_system.repo.UserDetails;
 import com.pranavbanksys.banking_system.service.FixedDeposit_Service;
-import com.pranavbanksys.banking_system.repo.FixedDeposit_Details;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,43 +20,45 @@ public class FixedDeposit {
     @PostMapping("/create-fd")
     public ResponseEntity<?> createFixedDeposit(@RequestBody FDRequest request, HttpSession session) {
         try {
-            // 1. Authenticate via Session
+            // Authenticate via Session
             Object ses = session.getAttribute("currentUser");
             if (ses == null) throw new IllegalStateException("Not logged in");
-            UserDetails currentUser = (UserDetails) ses;    
+            UserDetails currentUser = (UserDetails) ses;
 
-            // 2. Process the FD creation via Service
+            // Process the FD creation via Service
             fixedDepositService.createFixedDeposit(
-                currentUser.getUEmail(), 
-                request.getFdType(), 
-                request.getFdAmount(), 
-                request.getFdDuration()
+                    currentUser.getUEmail(),
+                    request.getFdType(),
+                    request.getFdAmount(),
+                    request.getFdDuration()
             );
-            return ResponseEntity.ok("Fixed Deposit created successfully");
+
+           // Return success message as JSON
+            return ResponseEntity.ok(Map.of("message", "Fixed Deposit created successfully"));
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
     @GetMapping("/my-fds")
     public ResponseEntity<?> viewMyFDs(HttpSession session) {
         try {
-            // 1. Authenticate via Session
+            // Authenticate via Session
             Object ses = session.getAttribute("currentUser");
             if (ses == null) throw new IllegalStateException("Not logged in");
             UserDetails currentUser = (UserDetails) ses;
 
-            // 2. Fetch the FDs for this specific user
+            // Fetch the user's FDs via Service
             var myFDs = fixedDepositService.getMyFDs(currentUser.getUEmail());
 
-            // 3. Return the full list of FD details as JSON
+            // Return the list of FDs as JSON
             return ResponseEntity.ok(myFDs);
 
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
-
+// DTO for FD creation request
     @Data
     static class FDRequest {
         private String fdType;
