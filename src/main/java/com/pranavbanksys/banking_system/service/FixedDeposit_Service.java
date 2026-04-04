@@ -13,7 +13,7 @@ import com.pranavbanksys.banking_system.repo.UserDetails;
 @Service
 @RequiredArgsConstructor
 public class FixedDeposit_Service {
-    
+
     private final FixedDeposit_DB fixedDepositDB;
     private final UserDB userDB;
 
@@ -26,11 +26,11 @@ public class FixedDeposit_Service {
         return user;
     }
     // This method is to fetch all the FDs for a specific user based on their email, which will be used in the controller to show the user their FDs
-        public List<FixedDeposit_Details> getMyFDs(String email) {
+    public List<FixedDeposit_Details> getMyFDs(String email) {
         return fixedDepositDB.findByAccountEmail(email);
     }
 
-@Transactional
+    @Transactional
     public void createFixedDeposit(String accountEmail, String fdType, Double fdAmount, Integer fdDuration) {
         UserDetails user = getUser(accountEmail);
 
@@ -41,14 +41,14 @@ public class FixedDeposit_Service {
 
         // Just get the flat interest rate based on the string they send
         Double interestRate = getInterestRate(fdType);
-    
+
         FixedDeposit_Details fdDetails = new FixedDeposit_Details();
         fdDetails.setAccountEmail(accountEmail);
         fdDetails.setFdType(fdType.toUpperCase());
         fdDetails.setFdAmount(fdAmount);
         fdDetails.setFdDuration(fdDuration);
         fdDetails.setFdInterestRate(interestRate);
-        // Calculate maturity amount using compound interest formula: A = P(1 + r/n)^(nt)    
+        // Calculate maturity amount using compound interest formula: A = P(1 + r/n)^(nt)
         double timeInYears = fdDuration / 12.0;
         double maturityAmount = fdAmount * Math.pow((1 + (interestRate / 100)), timeInYears);
         fdDetails.setFdMaturityAmount(maturityAmount);
@@ -62,7 +62,7 @@ public class FixedDeposit_Service {
         user.setAccountBalance((long) (user.getAccountBalance() - fdAmount));
         userDB.save(user);
     }
-// This method is to determine the interest rate based on the type of FD, and it can be easily extended in the future if we want to add more types of FDs with different rates
+    // This method is to determine the interest rate based on the type of FD, and it can be easily extended in the future if we want to add more types of FDs with different rates
     private Double getInterestRate(String fdType) {
         // Default interest rate if fdType is null or doesn't match any case
         if (fdType == null) return 6.0;

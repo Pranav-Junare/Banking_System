@@ -33,7 +33,7 @@ public class FixedDeposit {
                     request.getFdDuration()
             );
 
-           // Return success message as JSON
+            // Return success message as JSON
             return ResponseEntity.ok(Map.of("message", "Fixed Deposit created successfully"));
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -58,7 +58,7 @@ public class FixedDeposit {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
-// DTO for FD creation request
+    // DTO for FD creation request
     @Data
     static class FDRequest {
         private String fdType;
