@@ -63,4 +63,4 @@ public class SIP {
         private Double sipAmount;
         private Integer sipDuration; // in months
     }
-    
+}
