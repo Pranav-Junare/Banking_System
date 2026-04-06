@@ -33,9 +33,9 @@ public class TransactionHistoryAdmin {
         for(TransactionDetails transactionDetails:history){
 
             UserDetails sender=userDB.findByuEmail(transactionDetails.getFromUser());
-            String senderName= sender.getUName();
+            String senderName= (sender != null) ? sender.getUName() : "Deleted User";
             UserDetails receiver=userDB.findByuEmail(transactionDetails.getToUser());
-            String receiverName=receiver.getUName();
+            String receiverName= (receiver != null) ? receiver.getUName() : "Deleted User";
 
             reactDataList.add(Map.of(
                     "transactionId", transactionDetails.getTransactionID(),

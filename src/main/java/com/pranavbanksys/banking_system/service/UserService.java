@@ -3,6 +3,7 @@ package com.pranavbanksys.banking_system.service;
 import com.pranavbanksys.banking_system.repo.UserDB;
 import com.pranavbanksys.banking_system.repo.UserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 //    Used to access the user database
     private final UserDB userDB;
+    private final PasswordEncoder passwordEncoder;
 
 //    Registers and saves the data of the user in DB only if there is no same email
 //    Takes Name, Email, Password, Phone Number
@@ -25,6 +27,9 @@ public class UserService {
             userDetails.setAccountBalance(0L);
         }
 
+//        Hash the password before saving
+        userDetails.setUPassword(passwordEncoder.encode(userDetails.getUPassword()));
+
 //        Save the data to the database
         userDB.save(userDetails);
     }
@@ -37,12 +42,13 @@ public class UserService {
         UserDetails user = userDB.findByuEmail(email);
 
 //        If user=null, then not found in the DB
-        if(user==null) throw new IllegalStateException("No user notfound");
+        if(user==null) throw new IllegalStateException("User not found");
 
-//        If password does not match the entered password, then throw wrong password
-        if(!user.getUPassword().equals(password)) throw new IllegalStateException("Wrong Password");
+//        If password does not match the entered password (using BCrypt match), then throw wrong password
+        if(!passwordEncoder.matches(password, user.getUPassword())) throw new IllegalStateException("Wrong Password");
 
 //        Return the user cause it exists by mail and the password is true
         return user;
     }
 }
+

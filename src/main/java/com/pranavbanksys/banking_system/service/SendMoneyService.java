@@ -6,10 +6,7 @@ import com.pranavbanksys.banking_system.repo.UserDB;
 import com.pranavbanksys.banking_system.repo.UserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +21,8 @@ public class SendMoneyService {
     public UserDetails doesExists(String email){
         UserDetails user=userDB.findByuEmail(email);
 
-//        If email==null error
-        if(user.getUEmail()==null) throw new IllegalStateException("No user found");
+//        If user is null, not found in the DB
+        if(user==null) throw new IllegalStateException("No user found");
 
 //        If not return user
         return user;

@@ -45,26 +45,35 @@ public class LoanService {
         //  Update User's balance
         user.setAccountBalance(user.getAccountBalance() + amount);
         loanDetails.setLoanType(loanType.toUpperCase());
-        // Convert months to years for the interest formula
-        double timeInYears = tenure / 12.0;
+        // Calculate EMI (Equated Monthly Installment)
+        // Formula: E = P * r * (1+r)^n / ((1+r)^n - 1)
+        // Where P = Principal (amount), r = Monthly Interest Rate, n = Tenure in Months
+        double monthlyInterestRate = (interestRate / 100.0) / 12.0;
+        
+        double monthlyPayment;
+        double totalPayment;
+        double totalInterest;
 
-        // Calculate Simple Interest: (P * R * T) / 100
-        double totalInterest = (amount * interestRate * timeInYears) / 100.0;
-
-        // Total amount to be repaid
-        double totalPayment = amount + totalInterest;
-
-        // EMI (Equated Monthly Installment)
-        double monthlyPayment = totalPayment / tenure;
+        if (monthlyInterestRate > 0 && tenure > 0) {
+            double mathPower = Math.pow(1 + monthlyInterestRate, tenure);
+            monthlyPayment = amount * monthlyInterestRate * (mathPower / (mathPower - 1));
+            totalPayment = monthlyPayment * tenure;
+            totalInterest = totalPayment - amount;
+        } else {
+            // Edge case: 0% interest rate or 0 tenure
+            monthlyPayment = tenure > 0 ? (double) amount / tenure : amount;
+            totalPayment = amount;
+            totalInterest = 0.0;
+        }
 
         //  Set the attributes on loanDetails
         loanDetails.setAccountEmail(accountEmail);
         loanDetails.setAmount((double) amount);
         loanDetails.setInterestRate((double) interestRate);
         loanDetails.setTenure(tenure);
-        loanDetails.setTotalInterest((double) totalInterest);
-        loanDetails.setTotalPayment((double) totalPayment);
-        loanDetails.setMonthlyPayment((double) monthlyPayment);
+        loanDetails.setTotalInterest(totalInterest);
+        loanDetails.setTotalPayment(totalPayment);
+        loanDetails.setMonthlyPayment(monthlyPayment);
 
         loanDetails.setStatus("Pending");
         loanDetails.setCreatedAt(String.valueOf(LocalDateTime.now()));

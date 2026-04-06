@@ -50,9 +50,16 @@ public class SIP_Service {
         sipDetails.setSipDuration(sipDuration);
         sipDetails.setSipInterestRate(interestRate);
 
-        // Calculate maturity amount
-        double timeInYears = sipDuration / 12.0;
-        double maturityAmount = sipAmount * Math.pow((1 + (interestRate / 100)), timeInYears);
+        // Calculate maturity amount using correct SIP formula:
+        // M = P × [(1 + r)^n – 1] / r × (1 + r)
+        // where P = monthly investment, r = monthly interest rate, n = total months
+        double monthlyRate = interestRate / 100.0 / 12.0;
+        double maturityAmount;
+        if (monthlyRate > 0) {
+            maturityAmount = sipAmount * (Math.pow(1 + monthlyRate, sipDuration) - 1) / monthlyRate * (1 + monthlyRate);
+        } else {
+            maturityAmount = sipAmount * sipDuration;
+        }
         sipDetails.setSipMaturityAmount(maturityAmount);
 
         // Set the start date as current date and maturity date based on the duration
