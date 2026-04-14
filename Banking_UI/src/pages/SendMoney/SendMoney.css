@@ -1,12 +1,141 @@
-.send-page { padding: var(--space-xl) var(--space-2xl); max-width: 800px; }
-.send-page h1 { font-size: var(--font-3xl); font-weight: 800; }
-.page-subtitle { color: var(--text-secondary); margin: var(--space-xs) 0 var(--space-xl); }
-.send-container { display: flex; flex-direction: column; gap: var(--space-xl); }
-.send-form-card { padding: var(--space-xl); }
-.send-icon-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl); }
-.send-icon-circle { width: 56px; height: 56px; border-radius: var(--radius-lg); background: var(--accent-gradient); color: white; display: flex; align-items: center; justify-content: center; }
-.send-form { display: flex; flex-direction: column; gap: var(--space-md); }
-.send-btn { margin-top: var(--space-sm); }
-.send-success { padding: var(--space-2xl); text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); }
-.success-amount { font-size: var(--font-3xl); font-weight: 800; color: var(--accent-success); }
-.success-to { color: var(--text-secondary); }
+/* ═══════════════════════════════════════════════════════════════════════
+   SendMoney Page Styles
+   Styles for the fund transfer page including form card, success state,
+   and recent transfers history section.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Container ─────────────────────────────────────────────── */
+.send-page {
+  padding: var(--space-xl) var(--space-2xl); /* Generous page padding */
+  max-width: 800px;                          /* Maximum content width */
+}
+
+/* Page title */
+.send-page h1 {
+  font-size: var(--font-3xl);  /* 32px title */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* ─── Send Container ─────────────────────────────────────────────── */
+/* Vertical stack layout for form, success card, and history */
+.send-container {
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack vertically */
+  gap: var(--space-xl);         /* 32px gap between sections */
+}
+
+/* ─── Form Card ──────────────────────────────────────────────────── */
+.send-form-card {
+  padding: var(--space-xl);     /* 32px internal padding */
+}
+
+/* Icon header — gradient circle with title */
+.send-icon-header {
+  display: flex;                /* Horizontal layout */
+  align-items: center;          /* Vertically center */
+  gap: var(--space-md);         /* 16px gap between icon and text */
+  margin-bottom: var(--space-xl); /* Space below header */
+}
+
+/* Gradient circle around the send icon */
+.send-icon-circle {
+  width: 56px;                  /* Fixed square size */
+  height: 56px;
+  border-radius: var(--radius-lg); /* Rounded corners */
+  background: var(--accent-gradient); /* Purple-blue gradient */
+  color: white;                 /* White icon */
+  display: flex;                /* Center the icon */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Form fields stack */
+.send-form {
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack fields vertically */
+  gap: var(--space-md);         /* 16px gap between fields */
+}
+
+/* Submit button spacing */
+.send-btn {
+  margin-top: var(--space-sm);  /* 8px top margin */
+}
+
+/* ─── Success Confirmation Card ──────────────────────────────────── */
+.send-success {
+  padding: var(--space-2xl);    /* 48px padding for spaciousness */
+  text-align: center;           /* Center all text */
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack vertically */
+  align-items: center;          /* Center horizontally */
+  gap: var(--space-sm);         /* 8px gap between elements */
+}
+
+/* Large success amount in green */
+.success-amount {
+  font-size: var(--font-3xl);  /* 32px large number */
+  font-weight: 800;            /* Extra bold */
+  color: var(--accent-success); /* Green color */
+}
+
+/* "sent to" text in gray */
+.success-to {
+  color: var(--text-secondary); /* Muted gray text */
+}
+
+/* ─── Recent Transfers Section ───────────────────────────────────── */
+.recent-transfers h3 {
+  font-size: var(--font-xl);    /* 20px heading */
+  font-weight: 700;             /* Bold */
+  margin-bottom: var(--space-md); /* Space below heading */
+}
+
+/* Transfer list container */
+.transfers-list {
+  padding: 0;                   /* Remove default padding */
+  overflow: hidden;             /* Hide overflow for rounded corners */
+}
+
+/* Individual transfer item row */
+.transfer-item {
+  display: flex;                /* Horizontal layout */
+  align-items: center;          /* Vertically center */
+  gap: var(--space-md);         /* 16px gap between elements */
+  padding: var(--space-md) var(--space-lg); /* Row padding */
+  border-bottom: 1px solid var(--border-light); /* Row separator */
+  transition: background var(--transition-fast); /* Smooth hover */
+}
+
+/* Remove bottom border on last item */
+.transfer-item:last-child {
+  border-bottom: none;
+}
+
+/* Hover background effect */
+.transfer-item:hover {
+  background: var(--bg-hover);  /* Light lavender on hover */
+}
+
+/* Transfer details — name and time stacked */
+.transfer-details {
+  flex: 1;                      /* Take remaining space */
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack name and time vertically */
+}
+
+/* Transfer recipient name */
+.transfer-name {
+  font-weight: 600;             /* Semi-bold */
+  font-size: var(--font-sm);   /* 14px */
+  color: var(--text-primary);  /* Dark text */
+}
+
+/* Transfer metadata (time ago) */
+.transfer-meta {
+  font-size: var(--font-xs);   /* 12px */
+  color: var(--text-muted);    /* Light gray */
+  display: flex;                /* Flex for icon alignment */
+  align-items: center;          /* Center vertically */
+  gap: 4px;                    /* Small gap between icon and text */
+  margin-top: 2px;             /* Tiny top margin */
+}

@@ -1,17 +1,129 @@
-.pots-page { padding: var(--space-xl) var(--space-2xl); max-width: 1100px; }
-.pots-page h1 { font-size: var(--font-3xl); font-weight: 800; }
-.pots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-lg); }
-.pot-create-form { padding: var(--space-xl); display: flex; gap: var(--space-md); align-items: flex-end; margin-bottom: var(--space-xl); }
-.pot-create-form .input-group { flex: 1; }
-.pot-card { padding: var(--space-xl); display: flex; flex-direction: column; gap: var(--space-sm); }
-.pot-header { display: flex; align-items: center; gap: var(--space-sm); }
-.pot-icon { width: 40px; height: 40px; border-radius: var(--radius-md); background: rgba(108,92,231,0.1); color: var(--accent-primary); display: flex; align-items: center; justify-content: center; }
-.pot-amounts { display: flex; align-items: baseline; gap: var(--space-xs); }
-.pot-current { font-size: var(--font-2xl); font-weight: 800; }
-.pot-target { font-size: var(--font-sm); color: var(--text-muted); }
-.pot-progress-track { height: 8px; background: var(--bg-input); border-radius: var(--radius-full); overflow: hidden; }
-.pot-progress-bar { height: 100%; background: var(--accent-gradient); border-radius: var(--radius-full); }
-.pot-pct { font-size: var(--font-xs); color: var(--text-muted); font-weight: 600; }
-.pot-actions { display: flex; gap: var(--space-xs); margin-top: var(--space-sm); }
-.pot-actions .ctrl-input { flex: 1; }
-@media (max-width: 768px) { .pot-create-form { flex-direction: column; } }
+/* ═══════════════════════════════════════════════════════════════════════
+   Pots Page Styles
+   Styles for the savings pots page including create form,
+   pot cards with progress bars, and fund/withdraw controls.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Container ─────────────────────────────────────────────── */
+.pots-page {
+  padding: var(--space-xl) var(--space-2xl); /* Generous page padding */
+  max-width: 1100px;                        /* Maximum content width */
+}
+
+/* Page title */
+.pots-page h1 {
+  font-size: var(--font-3xl);  /* 32px title */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* ─── Pots Grid ──────────────────────────────────────────────────── */
+/* Responsive grid for pot cards */
+.pots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Auto-fill columns */
+  gap: var(--space-lg);        /* 24px gap between cards */
+}
+
+/* ─── Create Pot Form ────────────────────────────────────────────── */
+/* Inline form for creating a new savings pot */
+.pot-create-form {
+  padding: var(--space-xl);     /* 32px internal padding */
+  display: flex;                /* Horizontal layout */
+  gap: var(--space-md);         /* 16px gap between fields */
+  align-items: flex-end;        /* Align button to bottom of inputs */
+  margin-bottom: var(--space-xl); /* Space below form */
+}
+
+/* Input groups take equal space */
+.pot-create-form .input-group {
+  flex: 1;
+}
+
+/* ─── Pot Card ───────────────────────────────────────────────────── */
+/* Individual savings pot card */
+.pot-card {
+  padding: var(--space-xl);     /* 32px padding */
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack content vertically */
+  gap: var(--space-sm);         /* 8px gap between elements */
+}
+
+/* Pot header — icon and name */
+.pot-header {
+  display: flex;                /* Horizontal layout */
+  align-items: center;          /* Vertically center */
+  gap: var(--space-sm);         /* 8px gap */
+}
+
+/* Pot icon — purple-tinted square */
+.pot-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(108,92,231,0.1); /* Light purple tint */
+  color: var(--accent-primary);     /* Purple icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Amount display — current amount and target */
+.pot-amounts {
+  display: flex;                /* Horizontal layout */
+  align-items: baseline;        /* Align at text baseline */
+  gap: var(--space-xs);         /* Small gap */
+}
+
+/* Current amount — large bold number */
+.pot-current {
+  font-size: var(--font-2xl);  /* 24px */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* Target amount — small gray text */
+.pot-target {
+  font-size: var(--font-sm);   /* 14px */
+  color: var(--text-muted);    /* Light gray */
+}
+
+/* Progress bar track — gray background */
+.pot-progress-track {
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: var(--radius-full);
+  overflow: hidden;             /* Clip the progress bar */
+}
+
+/* Progress bar fill — animated gradient */
+.pot-progress-bar {
+  height: 100%;
+  background: var(--accent-gradient); /* Purple-blue gradient */
+  border-radius: var(--radius-full);
+}
+
+/* Progress percentage text */
+.pot-pct {
+  font-size: var(--font-xs);   /* 12px */
+  color: var(--text-muted);    /* Light gray */
+  font-weight: 600;            /* Semi-bold */
+}
+
+/* Fund/Withdraw action buttons */
+.pot-actions {
+  display: flex;                /* Horizontal layout */
+  gap: var(--space-xs);         /* Small gap between elements */
+  margin-top: var(--space-sm);  /* Space above */
+}
+
+/* Amount input takes remaining space */
+.pot-actions .ctrl-input {
+  flex: 1;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Stack create form vertically on mobile */
+  .pot-create-form {
+    flex-direction: column;
+  }
+}

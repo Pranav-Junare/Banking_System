@@ -1,249 +1,292 @@
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════
    Dashboard Page Styles
-   ═══════════════════════════════════════════════ */
+   Styles for the main user dashboard including greeting header,
+   balance card, stats grid, and transaction history list.
+   ═══════════════════════════════════════════════════════════════════════ */
 
+/* ─── Page Container ─────────────────────────────────────────────── */
 .dashboard-page {
-  padding: var(--space-xl) var(--space-2xl);
-  max-width: 1100px;
+  padding: var(--space-xl) var(--space-2xl); /* 32px top/bottom, 48px left/right */
+  max-width: 1100px;                        /* Maximum content width for readability */
 }
 
-/* ─── Header ─── */
+/* ─── Header Section ─────────────────────────────────────────────── */
 .dash-header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-xl); /* 32px space below header */
 }
 
+/* Large greeting text */
 .dash-greeting {
-  font-size: var(--font-3xl);
-  font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1.2;
+  font-size: var(--font-3xl);  /* 32px title */
+  font-weight: 800;            /* Extra bold */
+  color: var(--text-primary);  /* Dark text */
+  line-height: 1.2;            /* Tight line height */
 }
 
+/* Subtitle description */
 .dash-subtitle {
-  color: var(--text-secondary);
-  font-size: var(--font-base);
-  margin-top: var(--space-xs);
+  color: var(--text-secondary); /* Gray text */
+  font-size: var(--font-base);  /* 16px */
+  margin-top: var(--space-xs);  /* Small gap above */
 }
 
-/* ─── Balance Card ─── */
+/* ─── Balance Card ───────────────────────────────────────────────── */
+/* Section wrapper for the balance card */
 .balance-section {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-xl); /* Space below */
 }
 
+/* Large gradient card showing account balance */
 .balance-card {
-  padding: var(--space-xl) var(--space-2xl);
-  background: var(--accent-gradient) !important;
-  color: white;
-  border: none !important;
-  position: relative;
-  overflow: hidden;
+  padding: var(--space-xl) var(--space-2xl); /* Generous padding */
+  background: var(--accent-gradient) !important; /* Override glass-card bg with gradient */
+  color: white;                              /* White text on gradient */
+  border: none !important;                   /* Remove glass-card border */
+  position: relative;                        /* For pseudo-element positioning */
+  overflow: hidden;                          /* Clip decorative elements */
 }
 
+/* Decorative radial gradient circle on the card */
 .balance-card::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 400px; height: 400px;
+  top: -50%;                    /* Positioned above center */
+  right: -20%;                  /* Positioned right of center */
+  width: 400px;
+  height: 400px;
   background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  border-radius: 50%;
+  border-radius: 50%;           /* Circular shape */
 }
 
+/* Disable the glass-card hover lift on the balance card */
 .balance-card:hover {
   transform: none;
 }
 
+/* "Total Balance" label */
 .balance-label {
-  font-size: var(--font-sm);
-  opacity: 0.85;
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  font-size: var(--font-sm);   /* 14px small text */
+  opacity: 0.85;               /* Slightly transparent */
+  font-weight: 500;            /* Medium weight */
+  letter-spacing: 0.5px;       /* Slight letter spacing */
 }
 
+/* Large balance amount */
 .balance-amount {
-  font-size: var(--font-4xl);
-  font-weight: 800;
-  margin: var(--space-sm) 0 var(--space-xl);
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-xs);
+  font-size: var(--font-4xl);  /* 40px — very large */
+  font-weight: 800;            /* Extra bold */
+  margin: var(--space-sm) 0 var(--space-xl); /* Spacing above and below */
+  display: flex;               /* Flex for currency + amount alignment */
+  align-items: baseline;       /* Align at text baseline */
+  gap: var(--space-xs);        /* Small gap between ₹ and number */
 }
 
+/* Currency symbol (₹) */
 .currency {
-  font-size: var(--font-2xl);
-  opacity: 0.85;
-  font-weight: 600;
+  font-size: var(--font-2xl);  /* 24px — smaller than the amount */
+  opacity: 0.85;               /* Slightly transparent */
+  font-weight: 600;            /* Semi-bold */
 }
 
+/* ─── Quick Action Buttons ───────────────────────────────────────── */
+/* Container for send/save/cards/invest buttons on the balance card */
 .balance-actions {
-  display: flex;
-  gap: var(--space-lg);
+  display: flex;               /* Horizontal layout */
+  gap: var(--space-lg);        /* 24px gap between buttons */
 }
 
+/* Individual action button — vertical icon + label */
 .action-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-xs);
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-family: var(--font-family);
-  transition: transform var(--transition-fast);
+  display: flex;               /* Flex layout */
+  flex-direction: column;      /* Stack icon above text */
+  align-items: center;         /* Center horizontally */
+  gap: var(--space-xs);        /* Small gap between icon and label */
+  background: none;            /* Transparent background */
+  border: none;                /* No border */
+  color: white;                /* White text on gradient card */
+  cursor: pointer;             /* Pointer cursor */
+  font-family: var(--font-family); /* App font */
+  transition: transform var(--transition-fast); /* Smooth hover */
 }
 
+/* Lift the button on hover for interactivity */
 .action-btn:hover {
   transform: translateY(-3px);
 }
 
+/* Icon container — frosted glass circle */
 .action-icon {
-  width: 48px; height: 48px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-md);
-  display: flex;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);   /* Semi-transparent white */
+  backdrop-filter: blur(10px);              /* Frosted glass effect */
+  border-radius: var(--radius-md);          /* Rounded corners */
+  display: flex;                            /* Center the icon */
   align-items: center;
   justify-content: center;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast); /* Smooth hover */
 }
 
+/* Brighter icon background on button hover */
 .action-btn:hover .action-icon {
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* Button label text */
 .action-btn span {
-  font-size: var(--font-xs);
-  font-weight: 500;
-  opacity: 0.9;
+  font-size: var(--font-xs);  /* 12px small label */
+  font-weight: 500;           /* Medium weight */
+  opacity: 0.9;               /* Slightly transparent */
 }
 
-/* ─── Stats Grid ─── */
+/* ─── Stats Grid ─────────────────────────────────────────────────── */
+/* Three-column grid for stat cards */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md);
-  margin-bottom: var(--space-xl);
+  grid-template-columns: repeat(3, 1fr);  /* Three equal columns */
+  gap: var(--space-md);                    /* 16px gap */
+  margin-bottom: var(--space-xl);          /* Space below grid */
 }
 
+/* Individual stat card — horizontal icon + info */
 .stat-card {
-  padding: var(--space-lg);
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
+  padding: var(--space-lg);    /* 24px padding */
+  display: flex;               /* Horizontal layout */
+  align-items: center;         /* Vertically center */
+  gap: var(--space-md);        /* 16px gap between icon and info */
 }
 
+/* Stat icon container */
 .stat-icon {
-  width: 46px; height: 46px;
-  border-radius: var(--radius-md);
-  display: flex;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);  /* Rounded corners */
+  display: flex;                     /* Center the icon */
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 0;                   /* Don't shrink the icon */
 }
 
+/* Stat info text container — label above value */
 .stat-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: column;   /* Stack label and value */
 }
 
+/* Stat label — small uppercase text */
 .stat-label {
-  font-size: var(--font-xs);
-  color: var(--text-muted);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: var(--font-xs);        /* 12px */
+  color: var(--text-muted);         /* Light gray */
+  font-weight: 500;                 /* Medium weight */
+  text-transform: uppercase;        /* All caps */
+  letter-spacing: 0.5px;            /* Slight spacing */
 }
 
+/* Stat value — large bold number */
 .stat-value {
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: var(--font-lg);        /* 18px */
+  font-weight: 700;                 /* Bold */
+  color: var(--text-primary);       /* Dark text */
 }
 
-/* ─── Transactions ─── */
+/* ─── Transactions Section ───────────────────────────────────────── */
 .transactions-section {
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-2xl); /* 48px bottom margin */
 }
 
+/* Section header with title */
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-md);  /* Space below header */
 }
 
+/* Section heading */
 .section-header h2 {
-  font-size: var(--font-xl);
-  font-weight: 700;
+  font-size: var(--font-xl);  /* 20px */
+  font-weight: 700;           /* Bold */
 }
 
+/* Transaction list container — removes glass-card padding */
 .transactions-list {
   padding: 0;
-  overflow: hidden;
+  overflow: hidden;  /* Clip content for rounded corners */
 }
 
+/* Individual transaction row */
 .transaction-item {
   display: flex;
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
-  border-bottom: 1px solid var(--border-light);
-  transition: background var(--transition-fast);
+  border-bottom: 1px solid var(--border-light); /* Row separator */
+  transition: background var(--transition-fast); /* Smooth hover */
 }
 
+/* Remove border from last transaction */
 .transaction-item:last-child {
   border-bottom: none;
 }
 
+/* Hover background for transaction rows */
 .transaction-item:hover {
-  background: var(--bg-hover);
+  background: var(--bg-hover); /* Light lavender */
 }
 
+/* Transaction avatar — circular gradient with initial */
 .tx-avatar {
-  width: 40px; height: 40px;
-  border-radius: var(--radius-full);
-  background: var(--accent-gradient);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full); /* Fully circular */
+  background: var(--accent-gradient); /* Purple-blue gradient */
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: var(--font-sm);
-  flex-shrink: 0;
+  flex-shrink: 0;           /* Don't shrink the avatar */
 }
 
+/* Transaction details — name and ID stacked */
 .tx-details {
-  flex: 1;
+  flex: 1;                  /* Take remaining space */
   display: flex;
   flex-direction: column;
 }
 
+/* Receiver name */
 .tx-name {
   font-weight: 600;
   font-size: var(--font-sm);
   color: var(--text-primary);
 }
 
+/* Transaction ID */
 .tx-id {
   font-size: var(--font-xs);
   color: var(--text-muted);
 }
 
+/* Transaction amount */
 .tx-amount {
   font-weight: 700;
   font-size: var(--font-base);
 }
 
+/* Sent amount — red color */
 .tx-amount.sent {
   color: var(--accent-danger);
 }
 
+/* Received amount — green color */
 .tx-amount.received {
   color: var(--accent-success);
 }
 
-/* ─── Empty State ─── */
+/* ─── Empty State ────────────────────────────────────────────────── */
+/* Centered placeholder when no data is available */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -253,20 +296,24 @@
   gap: var(--space-sm);
 }
 
+/* Empty state heading */
 .empty-state p {
   font-weight: 600;
   color: var(--text-secondary);
 }
 
+/* Empty state description */
 .empty-state span {
   font-size: var(--font-sm);
 }
 
-/* ─── Responsive ─── */
+/* ─── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+  /* Stack stat cards vertically on mobile */
   .stats-grid {
     grid-template-columns: 1fr;
   }
+  /* Allow balance actions to wrap */
   .balance-actions {
     flex-wrap: wrap;
   }

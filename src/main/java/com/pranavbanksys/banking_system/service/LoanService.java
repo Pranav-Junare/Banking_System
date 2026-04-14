@@ -21,35 +21,23 @@ public class LoanService {
 
     public UserDetails getUser(String email) {
         UserDetails user = userDB.findByuEmail(email);
-
-        // If user is null or email is null, throw error
         if (user == null || user.getUEmail() == null) {
             throw new IllegalStateException("No user found");
         }
-
         return user;
     }
 
-
+    // ─── Apply for Loan (PENDING_APPROVAL — does NOT credit balance) ───
     @Transactional
     public void applyForLoan(String accountEmail, String loanType, int amount, int tenure) {
-        // Fetch the user to apply the loan amount to their balance
         UserDetails user = getUser(accountEmail);
-
-        // Determine the interest rate based on loanType
         int interestRate = getInterestRate(loanType);
 
-        // Create a new instance of LoanDetails
         LoanDetails loanDetails = new LoanDetails();
-
-        //  Update User's balance
-        user.setAccountBalance(user.getAccountBalance() + amount);
         loanDetails.setLoanType(loanType.toUpperCase());
-        // Calculate EMI (Equated Monthly Installment)
-        // Formula: E = P * r * (1+r)^n / ((1+r)^n - 1)
-        // Where P = Principal (amount), r = Monthly Interest Rate, n = Tenure in Months
+
+        // Calculate EMI
         double monthlyInterestRate = (interestRate / 100.0) / 12.0;
-        
         double monthlyPayment;
         double totalPayment;
         double totalInterest;
@@ -60,13 +48,11 @@ public class LoanService {
             totalPayment = monthlyPayment * tenure;
             totalInterest = totalPayment - amount;
         } else {
-            // Edge case: 0% interest rate or 0 tenure
             monthlyPayment = tenure > 0 ? (double) amount / tenure : amount;
             totalPayment = amount;
             totalInterest = 0.0;
         }
 
-        //  Set the attributes on loanDetails
         loanDetails.setAccountEmail(accountEmail);
         loanDetails.setAmount((double) amount);
         loanDetails.setInterestRate((double) interestRate);
@@ -74,30 +60,58 @@ public class LoanService {
         loanDetails.setTotalInterest(totalInterest);
         loanDetails.setTotalPayment(totalPayment);
         loanDetails.setMonthlyPayment(monthlyPayment);
-
-        loanDetails.setStatus("Pending");
+        // IMPORTANT: Status is PENDING_APPROVAL — admin must approve before balance is credited
+        loanDetails.setStatus("PENDING_APPROVAL");
         loanDetails.setCreatedAt(String.valueOf(LocalDateTime.now()));
         loanDetails.setUpdatedAt(String.valueOf(LocalDateTime.now()));
 
-        //  Save the loan record
         loanDB.save(loanDetails);
     }
 
-    // Fetches all loans belonging to a specific email
+    // ─── Admin Approves Loan — credits user balance ───
+    @Transactional
+    public void approveLoan(Long loanId) {
+        LoanDetails loan = loanDB.findById(loanId)
+            .orElseThrow(() -> new IllegalStateException("Loan not found"));
+        if (!"PENDING_APPROVAL".equals(loan.getStatus())) {
+            throw new IllegalStateException("Loan is not pending approval");
+        }
+        UserDetails user = getUser(loan.getAccountEmail());
+        // Credit the loan amount to user's balance
+        user.setAccountBalance(user.getAccountBalance() + Math.round(loan.getAmount()));
+        userDB.save(user);
+        loan.setStatus("APPROVED");
+        loan.setUpdatedAt(String.valueOf(LocalDateTime.now()));
+        loanDB.save(loan);
+    }
+
+    // ─── Admin Rejects Loan ───
+    @Transactional
+    public void rejectLoan(Long loanId) {
+        LoanDetails loan = loanDB.findById(loanId)
+            .orElseThrow(() -> new IllegalStateException("Loan not found"));
+        loan.setStatus("REJECTED");
+        loan.setUpdatedAt(String.valueOf(LocalDateTime.now()));
+        loanDB.save(loan);
+    }
+
+    // ─── Get all pending loans (for admin queue) ───
+    public List<LoanDetails> getPendingLoans() {
+        return loanDB.findByStatus("PENDING_APPROVAL");
+    }
+
     public List<LoanDetails> getMyLoans(String email) {
         return loanDB.findByAccountEmail(email);
     }
 
-    // Helper method to provide predefined annual interest rates
     private int getInterestRate(String loanType) {
-        if (loanType == null) return 12; // Default interest rate
-
+        if (loanType == null) return 12;
         return switch (loanType.toUpperCase()) {
-            case "HOME" -> 8; // 8% interest
-            case "EDUCATION" -> 10; // 10% interest
-            case "CAR" -> 9; // 9% interest
-            case "PERSONAL" -> 14; // 14% interest
-            default -> 12; // Default rate for any other type
+            case "HOME" -> 8;
+            case "EDUCATION" -> 10;
+            case "CAR" -> 9;
+            case "PERSONAL" -> 14;
+            default -> 12;
         };
     }
 }

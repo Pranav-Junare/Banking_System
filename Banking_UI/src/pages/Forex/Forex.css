@@ -1,10 +1,128 @@
-.forex-page { padding: var(--space-xl) var(--space-2xl); max-width: 1100px; }
-.forex-page h1 { font-size: var(--font-3xl); font-weight: 800; }
-.forex-wallet { margin-bottom: var(--space-xl); }
-.forex-wallet h3 { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg); font-size: var(--font-xl); }
-.forex-balances { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
-.forex-bal-card { padding: var(--space-xl); text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); }
-.forex-flag { font-size: 2rem; }
-.forex-curr { font-size: var(--font-sm); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-.forex-amt { font-size: var(--font-2xl); font-weight: 800; }
-@media (max-width: 768px) { .forex-balances { grid-template-columns: 1fr; } }
+/* ═══════════════════════════════════════════════════════════════════════
+   Forex Page Styles
+   Styles for the foreign exchange page including wallet display,
+   exchange rates grid, and currency conversion form.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Container ─────────────────────────────────────────────── */
+.forex-page {
+  padding: var(--space-xl) var(--space-2xl); /* Generous page padding */
+  max-width: 1100px;                        /* Maximum content width */
+}
+
+/* Page title */
+.forex-page h1 {
+  font-size: var(--font-3xl);  /* 32px title */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* ─── Exchange Rates Section ─────────────────────────────────────── */
+.exchange-rates-section {
+  margin-bottom: var(--space-xl); /* Space below section */
+}
+
+/* Section heading with icon */
+.exchange-rates-section h3 {
+  display: flex;                /* Flex for icon alignment */
+  align-items: center;          /* Vertically center */
+  gap: var(--space-sm);         /* Gap between icon and text */
+  font-size: var(--font-xl);   /* 20px heading */
+  font-weight: 700;             /* Bold */
+  margin-bottom: var(--space-lg); /* Space below heading */
+}
+
+/* Three-column grid for rate cards */
+.rates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+  gap: var(--space-md);                   /* 16px gap */
+}
+
+/* Individual rate card — centered content */
+.rate-card {
+  padding: var(--space-lg);     /* 24px padding */
+  text-align: center;           /* Center text */
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack vertically */
+  align-items: center;          /* Center horizontally */
+  gap: var(--space-xs);         /* Small gap between elements */
+}
+
+/* Country flag emoji */
+.rate-flag {
+  font-size: 2rem;              /* Large emoji */
+}
+
+/* Currency pair label */
+.rate-pair {
+  font-size: var(--font-sm);   /* 14px text */
+  color: var(--text-secondary); /* Gray text */
+  font-weight: 600;             /* Semi-bold */
+}
+
+/* Exchange rate value */
+.rate-value {
+  font-size: var(--font-2xl);  /* 24px — large number */
+  font-weight: 800;            /* Extra bold */
+  color: var(--text-primary);  /* Dark text */
+}
+
+/* ─── Forex Wallet Section ───────────────────────────────────────── */
+.forex-wallet {
+  margin-bottom: var(--space-xl); /* Space below wallet */
+}
+
+/* Wallet heading with icon */
+.forex-wallet h3 {
+  display: flex;                /* Flex for icon alignment */
+  align-items: center;          /* Vertically center */
+  gap: var(--space-sm);         /* Gap between icon and text */
+  font-size: var(--font-xl);   /* 20px heading */
+  margin-bottom: var(--space-lg); /* Space below heading */
+}
+
+/* Three-column grid for wallet balance cards */
+.forex-balances {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+  gap: var(--space-md);                   /* 16px gap */
+}
+
+/* Individual balance card — centered content */
+.forex-bal-card {
+  padding: var(--space-xl);     /* 32px padding */
+  text-align: center;           /* Center text */
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack vertically */
+  align-items: center;          /* Center horizontally */
+  gap: var(--space-xs);         /* Small gap between elements */
+}
+
+/* Currency flag emoji */
+.forex-flag {
+  font-size: 2rem;              /* Large emoji */
+}
+
+/* Currency code label */
+.forex-curr {
+  font-size: var(--font-sm);   /* 14px text */
+  color: var(--text-muted);    /* Light gray */
+  font-weight: 600;            /* Semi-bold */
+  text-transform: uppercase;   /* All caps */
+  letter-spacing: 1px;         /* Wide letter spacing */
+}
+
+/* Currency balance amount */
+.forex-amt {
+  font-size: var(--font-2xl);  /* 24px — large number */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Stack grids to single column on mobile */
+  .forex-balances,
+  .rates-grid {
+    grid-template-columns: 1fr;
+  }
+}

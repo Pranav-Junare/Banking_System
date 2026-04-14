@@ -1,15 +1,127 @@
-.wealth-page { padding: var(--space-xl) var(--space-2xl); max-width: 1100px; }
-.wealth-page h1 { font-size: var(--font-3xl); font-weight: 800; }
-.wealth-tabs { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); padding: 4px; background: var(--bg-input); border-radius: var(--radius-md); width: fit-content; }
-.tab-btn { display: flex; align-items: center; gap: var(--space-xs); padding: 0.5rem 1.2rem; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); font-family: var(--font-family); font-size: var(--font-sm); font-weight: 500; cursor: pointer; transition: all var(--transition-fast); }
-.tab-btn.active { background: var(--bg-secondary); color: var(--accent-primary); box-shadow: var(--shadow-sm); font-weight: 600; }
-.wealth-form { padding: var(--space-xl); margin-bottom: var(--space-xl); }
-.wealth-form-inner { display: flex; gap: var(--space-md); align-items: flex-end; }
-.wealth-form-inner .input-group { flex: 1; }
-.wealth-form-inner select { cursor: pointer; }
-.wealth-list { display: flex; flex-direction: column; gap: var(--space-md); }
-.wealth-item { padding: var(--space-lg) var(--space-xl); }
-.wi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm); }
-.wi-amount { font-size: var(--font-xl); font-weight: 800; }
-.wi-details { display: flex; gap: var(--space-xl); font-size: var(--font-sm); color: var(--text-secondary); }
-@media (max-width: 768px) { .wealth-form-inner { flex-direction: column; } .wi-details { flex-direction: column; gap: var(--space-xs); } }
+/* ═══════════════════════════════════════════════════════════════════════
+   Wealth Page Styles
+   Styles for the wealth management page including tab navigation,
+   creation forms for FDs/SIPs, and item list display.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Container ─────────────────────────────────────────────── */
+.wealth-page {
+  padding: var(--space-xl) var(--space-2xl); /* Generous page padding */
+  max-width: 1100px;                        /* Maximum content width */
+}
+
+/* Page title */
+.wealth-page h1 {
+  font-size: var(--font-3xl);  /* 32px title */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* ─── Tab Navigation ─────────────────────────────────────────────── */
+/* Pill-style tab container used by Wealth and Utility pages */
+.wealth-tabs {
+  display: flex;                /* Horizontal layout */
+  gap: var(--space-sm);         /* 8px gap between tabs */
+  margin-bottom: var(--space-xl); /* Space below tabs */
+  padding: 4px;                 /* Inner padding for pill shape */
+  background: var(--bg-input);  /* Light gray container */
+  border-radius: var(--radius-md); /* Rounded container */
+  width: fit-content;           /* Shrink to content width */
+}
+
+/* Tab button — base styles (shared with admin-tabs) */
+.wealth-tabs .tab-btn,
+.tab-btn {
+  display: flex;                /* Flex for icon + text */
+  align-items: center;          /* Vertically center */
+  gap: var(--space-xs);         /* Gap between icon and label */
+  padding: 0.5rem 1.2rem;      /* Comfortable click target */
+  border: none;                 /* No border */
+  border-radius: var(--radius-sm); /* Rounded corners */
+  background: transparent;      /* Transparent when inactive */
+  color: var(--text-secondary); /* Gray text */
+  font-family: var(--font-family); /* App font */
+  font-size: var(--font-sm);   /* 14px text */
+  font-weight: 500;            /* Medium weight */
+  cursor: pointer;             /* Pointer cursor */
+  transition: all var(--transition-fast); /* Smooth transitions */
+}
+
+/* Active tab — white background with shadow */
+.wealth-tabs .tab-btn.active,
+.tab-btn.active {
+  background: var(--bg-secondary); /* White background */
+  color: var(--accent-primary);    /* Purple text */
+  box-shadow: var(--shadow-sm);    /* Subtle elevation */
+  font-weight: 600;                /* Bold when active */
+}
+
+/* ─── Creation Form ──────────────────────────────────────────────── */
+.wealth-form {
+  padding: var(--space-xl);     /* 32px internal padding */
+  margin-bottom: var(--space-xl); /* Space below form */
+}
+
+/* Form fields in a horizontal row */
+.wealth-form-inner {
+  display: flex;                /* Horizontal layout */
+  gap: var(--space-md);         /* 16px gap between fields */
+  align-items: flex-end;        /* Align button to bottom */
+}
+
+/* Input groups stretch to fill available space */
+.wealth-form-inner .input-group {
+  flex: 1;
+}
+
+/* Select element cursor */
+.wealth-form-inner select {
+  cursor: pointer;
+}
+
+/* ─── Items List ─────────────────────────────────────────────────── */
+/* Vertical list of FD/SIP cards */
+.wealth-list {
+  display: flex;                /* Flex layout */
+  flex-direction: column;       /* Stack vertically */
+  gap: var(--space-md);         /* 16px gap between items */
+}
+
+/* Individual wealth item card */
+.wealth-item {
+  padding: var(--space-lg) var(--space-xl); /* 24px/32px padding */
+}
+
+/* Top row — badge and amount */
+.wi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+/* Large amount display */
+.wi-amount {
+  font-size: var(--font-xl);   /* 20px */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* Details row — duration, rate, maturity */
+.wi-details {
+  display: flex;
+  gap: var(--space-xl);         /* 32px gap between info items */
+  font-size: var(--font-sm);   /* 14px text */
+  color: var(--text-secondary); /* Gray text */
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Stack form fields vertically on mobile */
+  .wealth-form-inner {
+    flex-direction: column;
+  }
+  /* Stack details items vertically */
+  .wi-details {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+}

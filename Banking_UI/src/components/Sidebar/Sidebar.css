@@ -1,148 +1,183 @@
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════
    Sidebar Styles
-   ═══════════════════════════════════════════════ */
+   Fixed sidebar navigation on the left side of the app.
+   Contains logo, navigation links, and user info footer.
+   ═══════════════════════════════════════════════════════════════════════ */
 
+/* ─── Main Sidebar Container ─────────────────────────────────────────
+   Fixed-position panel pinned to the left edge of the viewport.
+   Spans the full height of the screen with scroll support.
+   ───────────────────────────────────────────────────────────────────── */
 .sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--sidebar-width);
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border-light);
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  overflow-y: auto;
+  position: fixed;                  /* Fixed to viewport — doesn't scroll with page */
+  left: 0;                         /* Pinned to left edge */
+  top: 0;                          /* Pinned to top edge */
+  bottom: 0;                       /* Stretch to bottom edge */
+  width: var(--sidebar-width);     /* 260px width from design tokens */
+  background: var(--bg-sidebar);   /* White background */
+  border-right: 1px solid var(--border-light); /* Right border separator */
+  display: flex;                   /* Flex column layout */
+  flex-direction: column;          /* Stack children vertically */
+  z-index: 100;                    /* Above main content */
+  overflow-y: auto;                /* Scroll if content overflows */
 }
 
-/* ─── Logo ─── */
+/* ─── Logo Section ───────────────────────────────────────────────────
+   Brand identity area at the top of the sidebar.
+   Contains the logo icon and bank name.
+   ───────────────────────────────────────────────────────────────────── */
 .sidebar-logo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-xl) var(--space-lg);
-  border-bottom: 1px solid var(--border-light);
+  display: flex;                   /* Horizontal layout */
+  align-items: center;             /* Vertically center logo and text */
+  gap: var(--space-sm);            /* 8px gap between icon and text */
+  padding: var(--space-xl) var(--space-lg); /* 32px top/bottom, 24px left/right */
+  border-bottom: 1px solid var(--border-light); /* Separator below logo */
 }
 
+/* Logo icon — gradient square with rupee symbol */
 .logo-icon {
-  width: 38px; height: 38px;
-  background: var(--accent-gradient);
-  color: white;
-  border-radius: var(--radius-md);
-  display: flex;
+  width: 38px;                     /* Fixed square size */
+  height: 38px;
+  background: var(--accent-gradient); /* Purple-blue gradient fill */
+  color: white;                    /* White symbol color */
+  border-radius: var(--radius-md); /* 12px rounded corners */
+  display: flex;                   /* Center content */
   align-items: center;
   justify-content: center;
-  font-size: var(--font-xl);
-  font-weight: 800;
+  font-size: var(--font-xl);      /* 20px symbol size */
+  font-weight: 800;               /* Extra bold */
 }
 
+/* Logo text — bank name */
 .logo-text {
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: var(--font-lg);      /* 18px text */
+  font-weight: 700;               /* Bold */
+  color: var(--text-primary);     /* Dark text */
 }
 
-/* ─── Navigation ─── */
+/* ─── Navigation Section ─────────────────────────────────────────────
+   Scrollable area containing all navigation links.
+   Takes up all available vertical space between logo and footer.
+   ───────────────────────────────────────────────────────────────────── */
 .sidebar-nav {
-  flex: 1;
-  padding: var(--space-md) var(--space-sm);
-  overflow-y: auto;
+  flex: 1;                         /* Grow to fill available space */
+  padding: var(--space-md) var(--space-sm); /* Internal padding */
+  overflow-y: auto;                /* Scroll if links overflow */
 }
 
+/* Section label — small uppercase text above link groups */
 .nav-section-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: var(--space-sm) var(--space-md);
-  margin-top: var(--space-sm);
+  font-size: 0.65rem;             /* Very small text */
+  font-weight: 700;               /* Bold */
+  color: var(--text-muted);       /* Light gray */
+  letter-spacing: 1.5px;          /* Wide letter spacing */
+  text-transform: uppercase;      /* All uppercase */
+  padding: var(--space-sm) var(--space-md); /* Padding for alignment */
+  margin-top: var(--space-sm);    /* Space above label */
 }
 
+/* ─── Navigation Links ───────────────────────────────────────────────
+   Individual sidebar links with icon and text label.
+   Styled with hover and active states for interactivity.
+   ───────────────────────────────────────────────────────────────────── */
 .sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 0.625rem var(--space-md);
-  margin: 2px 0;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  transition: all var(--transition-fast);
-  text-decoration: none;
+  display: flex;                   /* Horizontal layout for icon + text */
+  align-items: center;             /* Vertically center content */
+  gap: var(--space-sm);            /* 8px gap between icon and label */
+  padding: 0.625rem var(--space-md); /* Comfortable click target */
+  margin: 2px 0;                  /* Tiny vertical spacing between links */
+  border-radius: var(--radius-md); /* 12px rounded corners */
+  color: var(--text-secondary);   /* Gray text when inactive */
+  font-size: var(--font-sm);      /* 14px text */
+  font-weight: 500;               /* Medium weight */
+  transition: all var(--transition-fast); /* Smooth hover transitions */
+  text-decoration: none;          /* Remove underline from links */
 }
 
+/* Hover state — light purple background */
 .sidebar-link:hover {
-  background: var(--bg-hover);
-  color: var(--accent-primary);
+  background: var(--bg-hover);     /* Soft lavender background */
+  color: var(--accent-primary);   /* Purple text */
 }
 
+/* Active state — highlighted with purple tint */
 .sidebar-link.active {
-  background: rgba(108, 92, 231, 0.1);
-  color: var(--accent-primary);
-  font-weight: 600;
+  background: rgba(108, 92, 231, 0.1); /* Light purple tint */
+  color: var(--accent-primary);        /* Purple text */
+  font-weight: 600;                    /* Bold when active */
 }
 
+/* Active link icon color — matches the purple text */
 .sidebar-link.active svg {
-  color: var(--accent-primary);
+  color: var(--accent-primary);   /* Purple icon when active */
 }
 
+/* Admin switch link — styled with danger/red color */
 .admin-link {
-  color: var(--accent-danger);
-  opacity: 0.7;
+  color: var(--accent-danger);    /* Red text color */
+  opacity: 0.7;                   /* Semi-transparent when idle */
 }
+
+/* Admin link hover — full opacity with red tint background */
 .admin-link:hover {
-  opacity: 1;
-  background: rgba(225, 112, 85, 0.08);
-  color: var(--accent-danger);
+  opacity: 1;                     /* Full opacity on hover */
+  background: rgba(225, 112, 85, 0.08); /* Light red tint */
+  color: var(--accent-danger);    /* Keep red text */
 }
 
-/* ─── Footer ─── */
+/* ─── Footer Section ─────────────────────────────────────────────────
+   Bottom area of the sidebar showing logged-in user info and logout.
+   ───────────────────────────────────────────────────────────────────── */
 .sidebar-footer {
-  padding: var(--space-md) var(--space-lg);
-  border-top: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg); /* Internal padding */
+  border-top: 1px solid var(--border-light); /* Separator above footer */
+  display: flex;                   /* Horizontal layout */
+  align-items: center;             /* Vertically center */
+  justify-content: space-between;  /* User info left, logout right */
 }
 
+/* User info container — avatar and text side by side */
 .sidebar-user {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+  display: flex;                   /* Horizontal layout */
+  align-items: center;             /* Vertically center */
+  gap: var(--space-sm);            /* 8px gap between avatar and text */
 }
 
+/* User avatar — circular gradient with initial letter */
 .user-avatar {
-  width: 36px; height: 36px;
-  border-radius: var(--radius-full);
-  background: var(--accent-gradient);
-  color: white;
-  display: flex;
+  width: 36px;                     /* Fixed circle size */
+  height: 36px;
+  border-radius: var(--radius-full); /* Fully circular */
+  background: var(--accent-gradient); /* Purple-blue gradient */
+  color: white;                    /* White letter */
+  display: flex;                   /* Center the letter */
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: var(--font-sm);
+  font-weight: 700;               /* Bold letter */
+  font-size: var(--font-sm);      /* 14px letter size */
 }
 
+/* User info text container — stacks name and role vertically */
 .user-info {
-  display: flex;
-  flex-direction: column;
+  display: flex;                   /* Flex layout */
+  flex-direction: column;          /* Stack vertically */
 }
 
+/* User display name */
 .user-name {
-  font-size: var(--font-sm);
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: var(--font-sm);      /* 14px text */
+  font-weight: 600;               /* Semi-bold */
+  color: var(--text-primary);     /* Dark text */
 }
 
+/* User role label */
 .user-role {
-  font-size: var(--font-xs);
-  color: var(--text-muted);
+  font-size: var(--font-xs);      /* 12px text */
+  color: var(--text-muted);       /* Light gray */
 }
 
+/* Logout button — inherits .btn-icon styles, removes border */
 .sidebar-logout {
-  border: none;
-  cursor: pointer;
+  border: none;                    /* Remove any default border */
+  cursor: pointer;                 /* Pointer cursor on hover */
 }

@@ -1,18 +1,36 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Layout Styles
+   Defines the top-level page structure with a sidebar + main content
+   area arrangement using CSS flexbox.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── App Layout Container ───────────────────────────────────────────
+   Horizontal flex container that holds the sidebar and main content.
+   Ensures the layout spans the full viewport height.
+   ───────────────────────────────────────────────────────────────────── */
 .app-layout {
-  display: flex;
-  min-height: 100vh;
+  display: flex;          /* Horizontal flex layout (sidebar | content) */
+  min-height: 100vh;      /* Full viewport height minimum */
 }
 
+/* ─── Main Content Area ──────────────────────────────────────────────
+   The area to the right of the fixed sidebar where page content renders.
+   Uses margin-left to offset for the fixed sidebar's width.
+   ───────────────────────────────────────────────────────────────────── */
 .main-content {
-  flex: 1;
-  margin-left: var(--sidebar-width);
-  padding: var(--space-md);
-  background: var(--bg-primary);
-  min-height: 100vh;
+  flex: 1;                           /* Take up all remaining horizontal space */
+  margin-left: var(--sidebar-width); /* Offset by the sidebar's fixed width (260px) */
+  padding: var(--space-md);          /* 16px padding around content */
+  background: var(--bg-primary);     /* Light gray page background */
+  min-height: 100vh;                 /* Full viewport height */
 }
 
+/* ─── Responsive — Mobile Breakpoint ─────────────────────────────────
+   On small screens, the sidebar is hidden (width: 0), so remove
+   the left margin so content takes the full screen width.
+   ───────────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .main-content {
-    margin-left: 0;
+    margin-left: 0;  /* No offset when sidebar is collapsed */
   }
 }

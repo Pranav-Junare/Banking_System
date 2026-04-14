@@ -1,5 +1,53 @@
-.utility-page { padding: var(--space-xl) var(--space-2xl); max-width: 1100px; }
-.utility-page h1 { font-size: var(--font-3xl); font-weight: 800; }
-.bill-result { display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-lg); padding: var(--space-md) var(--space-lg); background: var(--bg-input); border-radius: var(--radius-md); }
-.bill-info { display: flex; gap: var(--space-xl); font-size: var(--font-sm); }
-.bill-info strong { color: var(--accent-primary); }
+/* ═══════════════════════════════════════════════════════════════════════
+   Utility Page Styles
+   Styles for the bill payment and mobile recharge page, including
+   bill result display and recent payments history.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Container ─────────────────────────────────────────────── */
+.utility-page {
+  padding: var(--space-xl) var(--space-2xl); /* Generous page padding */
+  max-width: 1100px;                        /* Maximum content width */
+}
+
+/* Page title */
+.utility-page h1 {
+  font-size: var(--font-3xl);  /* 32px title */
+  font-weight: 800;            /* Extra bold */
+}
+
+/* ─── Bill Result Display ────────────────────────────────────────── */
+/* Shows the fetched bill details with a pay button */
+.bill-result {
+  display: flex;                /* Horizontal layout */
+  align-items: center;          /* Vertically center */
+  justify-content: space-between; /* Bill info left, pay button right */
+  margin-top: var(--space-lg);  /* Space above */
+  padding: var(--space-md) var(--space-lg); /* Internal padding */
+  background: var(--bg-input);  /* Light gray background */
+  border-radius: var(--radius-md); /* Rounded corners */
+}
+
+/* Bill info container */
+.bill-info {
+  display: flex;                /* Horizontal layout */
+  gap: var(--space-xl);         /* 32px gap between items */
+  font-size: var(--font-sm);   /* 14px text */
+}
+
+/* Highlighted bill amount */
+.bill-info strong {
+  color: var(--accent-primary); /* Purple text for emphasis */
+}
+
+/* ─── Recent Payments Section ────────────────────────────────────── */
+.recent-payments {
+  margin-top: var(--space-xl);  /* Space above */
+}
+
+/* Recent payments heading */
+.recent-payments h3 {
+  font-size: var(--font-xl);    /* 20px heading */
+  font-weight: 700;             /* Bold */
+  margin-bottom: var(--space-md); /* Space below heading */
+}

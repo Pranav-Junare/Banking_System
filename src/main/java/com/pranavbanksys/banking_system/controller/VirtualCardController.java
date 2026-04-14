@@ -103,6 +103,19 @@ public class VirtualCardController {
         }
     }
 
+    @PostMapping("/set-daily-limit")
+    public ResponseEntity<?> setDailyLimit(@RequestBody DailyLimitRequest request, HttpSession session) {
+        String email = getEmailFromSession(session);
+        if (email == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthorized"));
+
+        try {
+            virtualCardService.updateDailyLimit(email, request.getCardId(), request.getDailyLimit());
+            return ResponseEntity.ok(Map.of("message", "Daily limit updated successfully."));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     // --- Mock External Merchant Payment via Card ---
     @PostMapping("/transaction")
     public ResponseEntity<?> processTransaction(@RequestBody CardTransactionRequest request) {
@@ -133,6 +146,12 @@ class PinConfirmRequest {
     private Long cardId;
     private String otp;
     private String newPin;
+}
+
+@Data
+class DailyLimitRequest {
+    private Long cardId;
+    private Double dailyLimit;
 }
 
 @Data

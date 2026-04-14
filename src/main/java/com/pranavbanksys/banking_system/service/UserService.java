@@ -91,6 +91,11 @@ public class UserService {
             throw new IllegalStateException("Wrong Password");
         }
 
+//        If account is SUSPENDED, block login
+        if(user.getAccountStatus() == com.pranavbanksys.banking_system.enums.AccountStatus.SUSPENDED) {
+            throw new IllegalStateException("Your account has been suspended. Contact admin for assistance.");
+        }
+
 //        Return the user cause it exists by mail and the password is true
         return user;
     }

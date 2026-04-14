@@ -79,6 +79,26 @@ public class CreditController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
+    @PostMapping("/check-eligibility")
+    public ResponseEntity<?> checkEligibility(@RequestBody EligibilityRequest request, HttpSession session) {
+        String email = getEmailFromSession(session);
+        if (email == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthorized"));
+
+        try {
+            double dtiRatio = request.getMonthlyDebt() / request.getMonthlyIncome();
+            boolean eligible = dtiRatio < 0.45 && request.getMonthlyIncome() > 10000;
+            double emi = (request.getRequestedAmount() / request.getTenureMonths()) * 1.05; // Dummy 5% rate
+
+            return ResponseEntity.ok(Map.of(
+                "eligible", eligible,
+                "dtiRatio", dtiRatio,
+                "emi", emi
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
 }
 
 @Data
@@ -90,4 +110,12 @@ class IncomeDataRequest {
 @Data
 class OverdraftRequest {
     private Double requestedOverdraftLimit;
+}
+
+@Data
+class EligibilityRequest {
+    private Double monthlyIncome;
+    private Double monthlyDebt;
+    private Double requestedAmount;
+    private Integer tenureMonths;
 }

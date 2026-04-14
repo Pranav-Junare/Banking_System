@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             )
 
+            .cors(org.springframework.security.config.Customizer.withDefaults())
             .httpBasic(basic -> basic.disable())
             .formLogin(form -> form.disable());
 

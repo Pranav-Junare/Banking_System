@@ -1,301 +1,411 @@
-/* ═══════════════════════════════════════════════
-   PranavBankSys — Modern Design System
-   ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════
+   PranavBankSys — Global Design System
+   This file defines the complete design foundation for the entire app.
+   All colors, typography, spacing, and reusable component styles live here.
+   ═══════════════════════════════════════════════════════════════════════ */
 
+/* Import the Outfit font family from Google Fonts for premium typography */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-/* ─── Reset ─── */
+/* ─── Reset ───────────────────────────────────────────────────────────
+   Remove default browser margins, padding, and set box-sizing to
+   border-box so padding is included in element width/height.
+   ───────────────────────────────────────────────────────────────────── */
 *, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 0;        /* Remove default margin from all elements */
+  padding: 0;       /* Remove default padding from all elements */
+  box-sizing: border-box; /* Include padding/border in element dimensions */
 }
 
-/* ─── Design Tokens ─── */
+/* ─── Design Tokens ───────────────────────────────────────────────────
+   CSS custom properties (variables) that define the visual language.
+   These tokens are referenced throughout all component styles to
+   ensure consistency across the entire application.
+   ───────────────────────────────────────────────────────────────────── */
 :root {
-  /* Colors */
-  --bg-primary: #F0F2F5;
-  --bg-secondary: #FFFFFF;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-glass: rgba(255, 255, 255, 0.6);
-  --bg-sidebar: #FFFFFF;
-  --bg-hover: #F5F3FF;
-  --bg-input: #F8F9FA;
+  /* ── Background Colors ── */
+  --bg-primary: #F0F2F5;       /* Main page background — soft off-white */
+  --bg-secondary: #FFFFFF;     /* Card/panel backgrounds — pure white */
+  --bg-card: rgba(255, 255, 255, 0.85); /* Glass-card background with transparency */
+  --bg-glass: rgba(255, 255, 255, 0.6); /* Lighter glass effect for overlays */
+  --bg-sidebar: #FFFFFF;       /* Sidebar background — clean white */
+  --bg-hover: #F5F3FF;         /* Hover state background — soft lavender */
+  --bg-input: #F8F9FA;         /* Input field background — faint gray */
 
-  --text-primary: #1A1D2B;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --text-white: #FFFFFF;
+  /* ── Text Colors ── */
+  --text-primary: #1A1D2B;     /* Primary text — near-black for readability */
+  --text-secondary: #6B7280;   /* Secondary text — muted gray */
+  --text-muted: #9CA3AF;       /* Tertiary/hint text — lighter gray */
+  --text-white: #FFFFFF;       /* Text on dark/gradient backgrounds */
 
-  --accent-primary: #6C5CE7;
-  --accent-secondary: #A29BFE;
+  /* ── Accent Colors & Gradients ── */
+  --accent-primary: #6C5CE7;   /* Primary brand color — vivid purple */
+  --accent-secondary: #A29BFE; /* Secondary brand color — soft lavender */
   --accent-gradient: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);
   --accent-gradient-warm: linear-gradient(135deg, #6C5CE7 0%, #E17055 100%);
-  --accent-success: #00B894;
-  --accent-danger: #E17055;
-  --accent-warning: #FDCB6E;
-  --accent-info: #74B9FF;
+  --accent-success: #00B894;   /* Success state — emerald green */
+  --accent-danger: #E17055;    /* Error/danger state — coral red */
+  --accent-warning: #FDCB6E;   /* Warning state — amber yellow */
+  --accent-info: #74B9FF;      /* Info state — sky blue */
 
-  --border-light: #E5E7EB;
-  --border-input: #D1D5DB;
+  /* ── Border Colors ── */
+  --border-light: #E5E7EB;     /* Subtle border — light gray */
+  --border-input: #D1D5DB;     /* Input field border — medium gray */
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
-  --shadow-glow: 0 0 30px rgba(108, 92, 231, 0.3);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  /* ── Shadow System ── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);      /* Subtle elevation */
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);      /* Medium elevation */
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);      /* High elevation */
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);     /* Maximum elevation */
+  --shadow-glow: 0 0 30px rgba(108, 92, 231, 0.3);  /* Purple glow effect */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06); /* Card shadow */
 
-  /* Typography */
+  /* ── Typography Scale ── */
   --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-xs: 0.75rem;
-  --font-sm: 0.875rem;
-  --font-base: 1rem;
-  --font-lg: 1.125rem;
-  --font-xl: 1.25rem;
-  --font-2xl: 1.5rem;
-  --font-3xl: 2rem;
-  --font-4xl: 2.5rem;
+  --font-xs: 0.75rem;    /* 12px — captions, labels */
+  --font-sm: 0.875rem;   /* 14px — small text, badges */
+  --font-base: 1rem;     /* 16px — body text */
+  --font-lg: 1.125rem;   /* 18px — emphasized text */
+  --font-xl: 1.25rem;    /* 20px — sub-headings */
+  --font-2xl: 1.5rem;    /* 24px — section headings */
+  --font-3xl: 2rem;      /* 32px — page titles */
+  --font-4xl: 2.5rem;    /* 40px — hero numbers */
 
-  /* Spacing */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
+  /* ── Spacing Scale ── */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
 
-  /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
+  /* ── Border Radius ── */
+  --radius-sm: 8px;      /* Subtle rounding */
+  --radius-md: 12px;     /* Standard rounding */
+  --radius-lg: 16px;     /* Card-level rounding */
+  --radius-xl: 24px;     /* Large panel rounding */
+  --radius-full: 9999px; /* Fully circular */
 
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* ── Transition Timing ── */
+  --transition-fast: 150ms ease;    /* Instant feel — hovers, toggles */
+  --transition-base: 250ms ease;    /* Standard — reveals, slides */
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1); /* Smooth — modals, cards */
 
-  /* Layout */
-  --sidebar-width: 260px;
-  --topbar-height: 72px;
+  /* ── Layout Constants ── */
+  --sidebar-width: 260px;   /* Fixed sidebar width */
+  --topbar-height: 72px;    /* Top navigation height */
 }
 
-/* ─── Base ─── */
+/* ─── Base Styles ─────────────────────────────────────────────────────
+   Foundational styles applied to the html and body elements.
+   Sets the root font size, smooth scrolling, and text rendering.
+   ───────────────────────────────────────────────────────────────────── */
 html {
-  font-size: 16px;
-  scroll-behavior: smooth;
+  font-size: 16px;          /* Base font size (1rem = 16px) */
+  scroll-behavior: smooth;  /* Enable smooth scrolling for anchor links */
 }
 
 body {
-  font-family: var(--font-family);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family);   /* Apply the Outfit font family */
+  background: var(--bg-primary);     /* Set the page background color */
+  color: var(--text-primary);        /* Set the default text color */
+  line-height: 1.6;                  /* Comfortable line height for reading */
+  -webkit-font-smoothing: antialiased;    /* Smooth font rendering on WebKit */
+  -moz-osx-font-smoothing: grayscale;    /* Smooth font rendering on Firefox/macOS */
 }
 
+/* ─── Links ───────────────────────────────────────────────────────── */
 a {
-  color: var(--accent-primary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
+  color: var(--accent-primary);          /* Links use the brand purple */
+  text-decoration: none;                 /* Remove default underline */
+  transition: color var(--transition-fast); /* Smooth color transition on hover */
 }
 
 a:hover {
-  color: var(--accent-secondary);
+  color: var(--accent-secondary);        /* Lighten link color on hover */
 }
 
-/* ─── Scrollbar ─── */
+/* ─── Custom Scrollbar ───────────────────────────────────────────────
+   Thin, minimal scrollbar for WebKit browsers (Chrome, Edge, Safari).
+   ───────────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 6px;              /* Narrow scrollbar width */
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent; /* Invisible scrollbar track */
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-light);
-  border-radius: var(--radius-full);
+  background: var(--border-light);      /* Light gray scrollbar thumb */
+  border-radius: var(--radius-full);    /* Fully rounded thumb */
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--text-muted);        /* Darken thumb on hover */
 }
 
-/* ─── Glass Card Utility ─── */
+/* ─── Glass Card Utility ─────────────────────────────────────────────
+   Reusable frosted-glass card style used across all pages.
+   Provides a translucent background with blur and subtle shadow.
+   ───────────────────────────────────────────────────────────────────── */
 .glass-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  background: var(--bg-card);                /* Semi-transparent white */
+  backdrop-filter: blur(12px);               /* Frosted glass blur effect */
+  -webkit-backdrop-filter: blur(12px);       /* Safari support for blur */
+  border: 1px solid var(--border-light);     /* Subtle border for definition */
+  border-radius: var(--radius-lg);           /* Rounded corners */
+  box-shadow: var(--shadow-card);            /* Layered shadow for depth */
   transition: box-shadow var(--transition-base), transform var(--transition-base);
 }
 
+/* Lift the card slightly on hover for interactivity feedback */
 .glass-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);   /* Stronger shadow on hover */
+  transform: translateY(-2px);    /* Subtle upward lift */
 }
 
-/* ─── Button System ─── */
+/* ─── Button System ──────────────────────────────────────────────────
+   A flexible button system with primary, secondary, danger, and icon
+   variants. All buttons share a common base and adapt via modifiers.
+   ───────────────────────────────────────────────────────────────────── */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  padding: 0.625rem 1.25rem;
-  font-family: var(--font-family);
-  font-size: var(--font-sm);
-  font-weight: 600;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-base);
-  white-space: nowrap;
+  display: inline-flex;           /* Inline flex for icon + text alignment */
+  align-items: center;            /* Vertically center content */
+  justify-content: center;        /* Horizontally center content */
+  gap: var(--space-sm);           /* Space between icon and text */
+  padding: 0.625rem 1.25rem;     /* Comfortable click target */
+  font-family: var(--font-family); /* Use the app font */
+  font-size: var(--font-sm);     /* 14px button text */
+  font-weight: 600;              /* Semi-bold for emphasis */
+  border: none;                  /* Remove default border */
+  border-radius: var(--radius-md); /* Rounded corners */
+  cursor: pointer;               /* Pointer cursor on hover */
+  transition: all var(--transition-base); /* Smooth transitions */
+  white-space: nowrap;           /* Prevent text wrapping */
 }
 
+/* Primary button — gradient background with purple glow shadow */
 .btn-primary {
-  background: var(--accent-gradient);
-  color: var(--text-white);
-  box-shadow: 0 4px 14px rgba(108, 92, 231, 0.35);
+  background: var(--accent-gradient);     /* Brand gradient */
+  color: var(--text-white);               /* White text */
+  box-shadow: 0 4px 14px rgba(108, 92, 231, 0.35); /* Purple glow */
 }
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+  transform: translateY(-2px);            /* Lift on hover */
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5); /* Stronger glow */
 }
 
+/* Secondary button — subtle gray background with border */
 .btn-secondary {
-  background: var(--bg-input);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
+  background: var(--bg-input);            /* Light gray background */
+  color: var(--text-primary);             /* Dark text */
+  border: 1px solid var(--border-light);  /* Subtle border */
 }
 .btn-secondary:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-primary);
+  background: var(--bg-hover);            /* Lavender background on hover */
+  border-color: var(--accent-primary);    /* Purple border on hover */
 }
 
+/* Danger button — for destructive actions like delete or freeze */
 .btn-danger {
-  background: var(--accent-danger);
-  color: var(--text-white);
+  background: var(--accent-danger);       /* Coral red background */
+  color: var(--text-white);               /* White text */
 }
 .btn-danger:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  opacity: 0.9;                           /* Slight fade on hover */
+  transform: translateY(-1px);            /* Subtle lift */
 }
 
+/* Icon-only button — circular shape for compact actions */
 .btn-icon {
-  width: 40px;
+  width: 40px;                           /* Fixed square dimensions */
   height: 40px;
-  padding: 0;
-  border-radius: var(--radius-full);
-  background: var(--bg-hover);
-  color: var(--accent-primary);
+  padding: 0;                           /* No padding — size is fixed */
+  border-radius: var(--radius-full);     /* Fully circular */
+  background: var(--bg-hover);           /* Soft lavender background */
+  color: var(--accent-primary);          /* Purple icon color */
 }
 .btn-icon:hover {
-  background: var(--accent-primary);
-  color: var(--text-white);
+  background: var(--accent-primary);     /* Purple background on hover */
+  color: var(--text-white);              /* White icon on hover */
 }
 
-/* ─── Input System ─── */
+/* ─── Input System ───────────────────────────────────────────────────
+   Form input styles including groups, labels, and focus states.
+   ───────────────────────────────────────────────────────────────────── */
 .input-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+  display: flex;                /* Stack label above input */
+  flex-direction: column;       /* Vertical layout */
+  gap: var(--space-xs);         /* Small gap between label and input */
 }
 
+/* Input label — small, muted text above the field */
 .input-group label {
-  font-size: var(--font-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: var(--font-sm);        /* 14px label text */
+  font-weight: 500;                 /* Medium weight */
+  color: var(--text-secondary);     /* Gray label color */
 }
 
+/* Text/number/email input field */
 .input-field {
-  padding: 0.75rem 1rem;
-  font-family: var(--font-family);
-  font-size: var(--font-base);
-  background: var(--bg-input);
-  border: 1.5px solid var(--border-input);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  outline: none;
+  padding: 0.75rem 1rem;                  /* Internal spacing */
+  font-family: var(--font-family);        /* App font */
+  font-size: var(--font-base);            /* 16px text */
+  background: var(--bg-input);            /* Light gray background */
+  border: 1.5px solid var(--border-input); /* Gray border */
+  border-radius: var(--radius-md);        /* Rounded corners */
+  color: var(--text-primary);             /* Dark text */
+  outline: none;                          /* Remove default outline */
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+/* Focus state — purple border with subtle glow ring */
 .input-field:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+  border-color: var(--accent-primary);                  /* Purple border */
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);     /* Purple glow ring */
 }
 
+/* Placeholder text style */
 .input-field::placeholder {
-  color: var(--text-muted);
+  color: var(--text-muted);  /* Light gray placeholder */
 }
 
-/* ─── Badge ─── */
+/* ─── Badge System ───────────────────────────────────────────────────
+   Small status indicators used for tags, statuses, and categories.
+   Each variant has a tinted background with matching text color.
+   ───────────────────────────────────────────────────────────────────── */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.6rem;
-  font-size: var(--font-xs);
-  font-weight: 600;
-  border-radius: var(--radius-full);
+  display: inline-flex;           /* Inline flex for alignment */
+  align-items: center;            /* Vertically center text */
+  padding: 0.2rem 0.6rem;        /* Compact padding */
+  font-size: var(--font-xs);     /* 12px text */
+  font-weight: 600;              /* Semi-bold */
+  border-radius: var(--radius-full); /* Fully rounded pill shape */
 }
+
+/* Success badge — green tint */
 .badge-success {
-  background: rgba(0, 184, 148, 0.12);
-  color: var(--accent-success);
+  background: rgba(0, 184, 148, 0.12);  /* Green tinted background */
+  color: var(--accent-success);          /* Green text */
 }
+
+/* Danger badge — red tint */
 .badge-danger {
-  background: rgba(225, 112, 85, 0.12);
-  color: var(--accent-danger);
+  background: rgba(225, 112, 85, 0.12); /* Red tinted background */
+  color: var(--accent-danger);           /* Red text */
 }
+
+/* Info badge — blue tint */
 .badge-info {
-  background: rgba(116, 185, 255, 0.12);
-  color: var(--accent-info);
+  background: rgba(116, 185, 255, 0.12); /* Blue tinted background */
+  color: var(--accent-info);              /* Blue text */
 }
 
-/* ─── Toast / Alert ─── */
+/* Warning badge — amber tint */
+.badge-warning {
+  background: rgba(253, 203, 110, 0.15); /* Amber tinted background */
+  color: #E67E22;                         /* Dark amber text */
+}
+
+/* ─── Toast / Alert Notification ─────────────────────────────────────
+   Fixed-position notification that slides in from the right.
+   Used for success/error messages after actions.
+   ───────────────────────────────────────────────────────────────────── */
 .toast {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  z-index: 9999;
-  animation: slideIn 0.3s ease;
-}
-.toast-success {
-  background: var(--accent-success);
-  color: white;
-}
-.toast-error {
-  background: var(--accent-danger);
-  color: white;
+  position: fixed;             /* Fixed to viewport */
+  top: 24px;                   /* 24px from top */
+  right: 24px;                 /* 24px from right */
+  padding: 1rem 1.5rem;       /* Internal spacing */
+  border-radius: var(--radius-md); /* Rounded corners */
+  font-size: var(--font-sm);  /* 14px text */
+  font-weight: 500;           /* Medium weight */
+  z-index: 9999;              /* Above everything */
+  animation: slideIn 0.3s ease; /* Slide-in animation */
 }
 
+/* Success toast — green */
+.toast-success {
+  background: var(--accent-success); /* Green background */
+  color: white;                      /* White text */
+}
+
+/* Error toast — red */
+.toast-error {
+  background: var(--accent-danger);  /* Red background */
+  color: white;                      /* White text */
+}
+
+/* Slide-in animation from the right edge */
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ─── Skeleton Loader ─── */
-.skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-sm);
+/* ─── Page Loader & Spinner ──────────────────────────────────────────
+   Full-page loading state and reusable spinner animation.
+   ───────────────────────────────────────────────────────────────────── */
+.page-loader {
+  display: flex;                     /* Center the spinner */
+  align-items: center;               /* Vertically center */
+  justify-content: center;           /* Horizontally center */
+  min-height: 100vh;                 /* Full viewport height */
+  background: var(--bg-primary);     /* Match page background */
 }
 
+/* Spinning circle animation used in buttons and loaders */
+.spinner {
+  width: 20px;                                      /* Spinner size */
+  height: 20px;
+  border: 2px solid rgba(108, 92, 231, 0.2);       /* Faint purple ring */
+  border-top-color: var(--accent-primary);          /* Bright purple top */
+  border-radius: 50%;                               /* Circular shape */
+  animation: spin 0.6s linear infinite;             /* Continuous rotation */
+}
+
+/* Rotation keyframe for the spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Skeleton Loader ────────────────────────────────────────────────
+   Placeholder shimmer animation shown while content is loading.
+   Provides visual feedback that data is being fetched.
+   ───────────────────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;          /* Double-wide for animation sweep */
+  animation: shimmer 1.5s infinite;    /* Continuous shimmer */
+  border-radius: var(--radius-sm);     /* Subtle rounding */
+}
+
+/* Shimmer sweep animation from right to left */
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
-/* ─── Responsive ─── */
+/* ─── Section Title ──────────────────────────────────────────────────
+   Reusable heading style for content sections across pages.
+   ───────────────────────────────────────────────────────────────────── */
+.section-title {
+  font-size: var(--font-xl);    /* 20px heading */
+  font-weight: 700;             /* Bold */
+  color: var(--text-primary);   /* Dark text */
+  margin-bottom: var(--space-md); /* Space below */
+}
+
+/* ─── Page Subtitle ──────────────────────────────────────────────────
+   Descriptive subtitle below page titles.
+   ───────────────────────────────────────────────────────────────────── */
+.page-subtitle {
+  color: var(--text-secondary);        /* Muted gray text */
+  font-size: var(--font-base);        /* 16px */
+  margin: var(--space-xs) 0 var(--space-xl); /* Top and bottom spacing */
+}
+
+/* ─── Responsive Breakpoint ──────────────────────────────────────────
+   Collapse the sidebar on small screens (mobile/tablet).
+   ───────────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   :root {
-    --sidebar-width: 0px;
+    --sidebar-width: 0px; /* Hide sidebar by setting width to 0 */
   }
 }

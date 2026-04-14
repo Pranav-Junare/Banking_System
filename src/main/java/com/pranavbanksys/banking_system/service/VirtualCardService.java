@@ -107,6 +107,23 @@ public class VirtualCardService {
         otpStore.remove(email + "_" + cardId);
     }
 
+    @Transactional
+    public void updateDailyLimit(String email, Long cardId, Double newLimit) {
+        if (newLimit == null || newLimit <= 0) {
+            throw new IllegalArgumentException("Limit must be greater than zero");
+        }
+
+        VirtualCard card = virtualCardDB.findById(cardId)
+                .orElseThrow(() -> new IllegalArgumentException("Card not found"));
+
+        if (!card.getAccountEmail().equals(email)) {
+            throw new IllegalArgumentException("Unauthorized card access");
+        }
+
+        card.setDailyLimit(newLimit);
+        virtualCardDB.save(card);
+    }
+
     // --- Transaction Validator ---
     
     @Transactional
