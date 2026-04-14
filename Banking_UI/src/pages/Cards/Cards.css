@@ -1,0 +1,54 @@
+.cards-page { padding: var(--space-xl) var(--space-2xl); max-width: 1100px; }
+.cards-page h1 { font-size: var(--font-3xl); font-weight: 800; }
+.cards-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-xl); }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: var(--space-xl); }
+
+/* ─── 3D Card ─── */
+.card-3d-section { display: flex; flex-direction: column; align-items: center; gap: var(--space-md); }
+.card-3d-container { width: 360px; height: 220px; perspective: 1000px; cursor: pointer; }
+.card-3d-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }
+.card-face { position: absolute; inset: 0; border-radius: var(--radius-lg); padding: var(--space-lg) var(--space-xl); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+/* Front */
+.card-front {
+  background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 40%, #74B9FF 100%);
+  color: white; display: flex; flex-direction: column; justify-content: space-between;
+  box-shadow: 0 20px 40px rgba(108, 92, 231, 0.35); position: relative; overflow: hidden;
+}
+.card-front::before { content: ''; position: absolute; top: -40%; right: -30%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); border-radius: 50%; }
+.card-front.frozen { filter: saturate(0.3) brightness(0.8); }
+.frozen-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(3px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-sm); color: rgba(255,255,255,0.9); font-weight: 700; z-index: 2; border-radius: var(--radius-lg); }
+.card-top-row { display: flex; justify-content: space-between; align-items: center; }
+.card-brand { font-weight: 700; font-size: var(--font-lg); letter-spacing: 0.5px; }
+.card-contactless { font-size: var(--font-xl); opacity: 0.7; }
+.card-chip { width: 40px; height: 30px; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 6px; margin: var(--space-sm) 0; }
+.card-pan { font-size: var(--font-xl); font-weight: 600; letter-spacing: 3px; }
+.card-bottom-row { display: flex; justify-content: space-between; }
+.card-label { display: block; font-size: 0.6rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+.card-val { display: block; font-size: var(--font-sm); font-weight: 600; }
+
+/* Back */
+.card-back {
+  background: linear-gradient(135deg, #2d3436, #636e72);
+  color: white; transform: rotateY(180deg);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  display: flex; flex-direction: column; justify-content: center; gap: var(--space-md);
+}
+.card-mag-stripe { height: 42px; background: #1a1a2e; margin: 0 calc(var(--space-xl) * -1); }
+.card-cvv-area { background: rgba(255,255,255,0.1); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; }
+.card-cvv { font-size: var(--font-xl); font-weight: 700; letter-spacing: 4px; }
+.card-back-text { font-size: var(--font-xs); opacity: 0.5; text-align: center; }
+
+.card-tap-hint { font-size: var(--font-xs); color: var(--text-muted); font-weight: 500; }
+
+/* ─── Controls ─── */
+.card-controls { display: flex; gap: var(--space-sm); flex-wrap: wrap; justify-content: center; }
+.ctrl-btn { display: inline-flex; align-items: center; gap: 4px; padding: 0.4rem 0.8rem; background: var(--bg-input); border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-family: var(--font-family); font-size: var(--font-xs); font-weight: 600; cursor: pointer; transition: all var(--transition-fast); color: var(--text-secondary); }
+.ctrl-btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+.ctrl-btn.active-ctrl { background: var(--accent-success); color: white; border-color: var(--accent-success); }
+.ctrl-inline { display: flex; gap: 4px; }
+.ctrl-input { width: 90px; padding: 0.4rem 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-family: var(--font-family); font-size: var(--font-xs); background: var(--bg-input); outline: none; }
+.ctrl-input:focus { border-color: var(--accent-primary); }
+.card-msg { padding: 0.4rem 1rem; background: rgba(0,184,148,0.1); color: var(--accent-success); border-radius: var(--radius-sm); font-size: var(--font-xs); font-weight: 600; }
+
+@media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr; } .card-3d-container { width: 100%; max-width: 360px; } }

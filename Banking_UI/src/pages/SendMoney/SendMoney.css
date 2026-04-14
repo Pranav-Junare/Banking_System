@@ -1,0 +1,12 @@
+.send-page { padding: var(--space-xl) var(--space-2xl); max-width: 800px; }
+.send-page h1 { font-size: var(--font-3xl); font-weight: 800; }
+.page-subtitle { color: var(--text-secondary); margin: var(--space-xs) 0 var(--space-xl); }
+.send-container { display: flex; flex-direction: column; gap: var(--space-xl); }
+.send-form-card { padding: var(--space-xl); }
+.send-icon-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl); }
+.send-icon-circle { width: 56px; height: 56px; border-radius: var(--radius-lg); background: var(--accent-gradient); color: white; display: flex; align-items: center; justify-content: center; }
+.send-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.send-btn { margin-top: var(--space-sm); }
+.send-success { padding: var(--space-2xl); text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); }
+.success-amount { font-size: var(--font-3xl); font-weight: 800; color: var(--accent-success); }
+.success-to { color: var(--text-secondary); }

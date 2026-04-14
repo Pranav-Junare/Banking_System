@@ -1,0 +1,21 @@
+{
+  "name": "banking_system",
+  "version": "1.0.0",
+  "description": "Abhi k liye I have created 2 test accounts\r >Email:test1<br>Password:test1<br><br>\r >Email:test2<br>Password:test2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pranav-Junare/Banking_System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Pranav-Junare/Banking_System/issues"
+  },
+  "homepage": "https://github.com/Pranav-Junare/Banking_System#readme"
+}

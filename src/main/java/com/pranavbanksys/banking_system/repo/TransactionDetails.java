@@ -18,4 +18,9 @@ public class TransactionDetails {
     private String toUser;
     private Long amount;
 
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    private com.pranavbanksys.banking_system.enums.TransactionStatus status = com.pranavbanksys.banking_system.enums.TransactionStatus.CLEARED;
+
+    private String flaggedReason;
+
 }

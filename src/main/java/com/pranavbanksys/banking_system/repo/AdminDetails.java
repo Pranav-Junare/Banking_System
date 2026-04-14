@@ -14,7 +14,16 @@ public class AdminDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aID;
 
+    @Column(nullable = false)
     private String aName;
+    
+    @Column(nullable = false)
     private String aPassword;
+    
+    @Column(nullable = false, unique = true)
     private String aEmail;
+
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    // @Column(nullable = false)
+    private com.pranavbanksys.banking_system.enums.AdminRole role = com.pranavbanksys.banking_system.enums.AdminRole.SUPPORT_AGENT;
 }

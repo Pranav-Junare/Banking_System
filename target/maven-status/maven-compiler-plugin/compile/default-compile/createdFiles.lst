@@ -1,6 +1,8 @@
 com\pranavbanksys\banking_system\controller\LoginAdmin.class
+com\pranavbanksys\banking_system\enums\TransactionStatus.class
 com\pranavbanksys\banking_system\controller\TransactionHistoryAdmin.class
 com\pranavbanksys\banking_system\controller\Login.class
+com\pranavbanksys\banking_system\DummyDataLoader.class
 com\pranavbanksys\banking_system\controller\CardStatusRequest.class
 com\pranavbanksys\banking_system\controller\Dashboard.class
 com\pranavbanksys\banking_system\controller\Loan.class
@@ -13,6 +15,7 @@ com\pranavbanksys\banking_system\controller\PinResetRequest.class
 com\pranavbanksys\banking_system\controller\PotController.class
 com\pranavbanksys\banking_system\repo\FixedDeposit_Details.class
 com\pranavbanksys\banking_system\controller\CardTransactionRequest.class
+com\pranavbanksys\banking_system\config\CORSconfig$1.class
 com\pranavbanksys\banking_system\controller\ForexConvertRequest.class
 com\pranavbanksys\banking_system\repo\LoanDB.class
 com\pranavbanksys\banking_system\repo\SIP_DB.class
@@ -21,14 +24,18 @@ com\pranavbanksys\banking_system\controller\SignupAdmin.class
 com\pranavbanksys\banking_system\controller\Home.class
 com\pranavbanksys\banking_system\controller\History.class
 com\pranavbanksys\banking_system\controller\IncomeDataRequest.class
+com\pranavbanksys\banking_system\repo\SystemConfig.class
 com\pranavbanksys\banking_system\controller\SIP.class
 com\pranavbanksys\banking_system\repo\AdminDetails.class
 com\pranavbanksys\banking_system\repo\UserDetails.class
 com\pranavbanksys\banking_system\service\SendMoneyService.class
+com\pranavbanksys\banking_system\enums\AdminRole.class
 com\pranavbanksys\banking_system\service\LoanService.class
 com\pranavbanksys\banking_system\controller\FixedDeposit$FDRequest.class
 com\pranavbanksys\banking_system\repo\CurrencyWalletDB.class
+com\pranavbanksys\banking_system\enums\KycStatus.class
 com\pranavbanksys\banking_system\repo\PotDetails.class
+com\pranavbanksys\banking_system\enums\AccountTier.class
 com\pranavbanksys\banking_system\controller\CreateServiceRequest.class
 com\pranavbanksys\banking_system\repo\UserDB.class
 com\pranavbanksys\banking_system\controller\UtilityController.class
@@ -41,6 +48,7 @@ com\pranavbanksys\banking_system\repo\CreditProfileDB.class
 com\pranavbanksys\banking_system\service\CoreBankingService.class
 com\pranavbanksys\banking_system\BankingSystemApplication.class
 com\pranavbanksys\banking_system\controller\FundPotRequest.class
+com\pranavbanksys\banking_system\repo\SystemConfigRepo.class
 com\pranavbanksys\banking_system\config\SecurityConfig.class
 com\pranavbanksys\banking_system\controller\FetchBillRequest.class
 com\pranavbanksys\banking_system\controller\RechargeRequest.class
@@ -55,10 +63,13 @@ com\pranavbanksys\banking_system\service\AirtelStrategy.class
 com\pranavbanksys\banking_system\repo\VirtualCardDB.class
 com\pranavbanksys\banking_system\service\PotService.class
 com\pranavbanksys\banking_system\controller\SendMoneyAdmin.class
+com\pranavbanksys\banking_system\repo\AuditLog.class
 com\pranavbanksys\banking_system\service\VirtualCardService.class
 com\pranavbanksys\banking_system\service\CreditService.class
 com\pranavbanksys\banking_system\controller\Loan$LoanRequest.class
+com\pranavbanksys\banking_system\repo\AuditLogRepo.class
 com\pranavbanksys\banking_system\repo\PotDB.class
+com\pranavbanksys\banking_system\enums\AccountStatus.class
 com\pranavbanksys\banking_system\controller\PinConfirmRequest.class
 com\pranavbanksys\banking_system\repo\TransactionDB.class
 com\pranavbanksys\banking_system\repo\CreditProfile.class

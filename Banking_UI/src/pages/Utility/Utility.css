@@ -1,0 +1,5 @@
+.utility-page { padding: var(--space-xl) var(--space-2xl); max-width: 1100px; }
+.utility-page h1 { font-size: var(--font-3xl); font-weight: 800; }
+.bill-result { display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-lg); padding: var(--space-md) var(--space-lg); background: var(--bg-input); border-radius: var(--radius-md); }
+.bill-info { display: flex; gap: var(--space-xl); font-size: var(--font-sm); }
+.bill-info strong { color: var(--accent-primary); }
