@@ -141,6 +141,52 @@ public class AdminDashboard {
         return ResponseEntity.ok(Map.of("message", "Account reactivated"));
     }
 
+    // ─── TRANSACTION REVIEW (FLAGGED TXNS) ──────────────────────────────────
+    @GetMapping("/api/admin/flagged-txns")
+    public ResponseEntity<?> getFlaggedTransactions(HttpSession session) {
+        List<TransactionDetails> txns = transactionDb.findByStatus(com.pranavbanksys.banking_system.enums.TransactionStatus.PENDING_REVIEW);
+        return ResponseEntity.ok(txns);
+    }
+
+    @PostMapping("/api/admin/flagged-txns/{id}/approve")
+    public ResponseEntity<?> approveFlaggedTransaction(@PathVariable String id, HttpSession session) {
+        TransactionDetails txn = transactionDb.findById(id).orElse(null);
+        if (txn == null || txn.getStatus() != com.pranavbanksys.banking_system.enums.TransactionStatus.PENDING_REVIEW) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Transaction not found or not pending"));
+        }
+        
+        UserDetails receiver = userDb.findByuEmail(txn.getToUser());
+        if (receiver != null) {
+            receiver.setAccountBalance(receiver.getAccountBalance() + txn.getAmount());
+            userDb.save(receiver);
+        }
+        
+        txn.setStatus(com.pranavbanksys.banking_system.enums.TransactionStatus.CLEARED);
+        txn.setFlaggedReason(txn.getFlaggedReason() + " (Approved)");
+        transactionDb.save(txn);
+        return ResponseEntity.ok(Map.of("message", "Transaction approved"));
+    }
+
+    @PostMapping("/api/admin/flagged-txns/{id}/reject")
+    public ResponseEntity<?> rejectFlaggedTransaction(@PathVariable String id, HttpSession session) {
+        TransactionDetails txn = transactionDb.findById(id).orElse(null);
+        if (txn == null || txn.getStatus() != com.pranavbanksys.banking_system.enums.TransactionStatus.PENDING_REVIEW) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Transaction not found or not pending"));
+        }
+        
+        // Refund sender
+        UserDetails sender = userDb.findByuEmail(txn.getFromUser());
+        if (sender != null) {
+            sender.setAccountBalance(sender.getAccountBalance() + txn.getAmount());
+            userDb.save(sender);
+        }
+        
+        txn.setStatus(com.pranavbanksys.banking_system.enums.TransactionStatus.REVERSED);
+        txn.setFlaggedReason(txn.getFlaggedReason() + " (Rejected)");
+        transactionDb.save(txn);
+        return ResponseEntity.ok(Map.of("message", "Transaction rejected"));
+    }
+
     // ─── ALL USERS LIST (for admin management) ──────────────────────────
     @GetMapping("/api/admin/users")
     public ResponseEntity<?> getAllUsers(HttpSession session) {

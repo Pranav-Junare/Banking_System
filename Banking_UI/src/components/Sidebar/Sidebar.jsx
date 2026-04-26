@@ -94,7 +94,7 @@ export default function Sidebar() {
       {/* Brand logo at the top of the sidebar */}
       <div className="sidebar-logo">
         <div className="logo-icon">₹</div>           {/* Rupee symbol as logo icon */}
-        <span className="logo-text">PranavBank</span> {/* Bank name text */}
+        <span className="logo-text">Bank</span> {/* Bank name text */}
       </div>
 
       {/* ── Navigation Section ── */}

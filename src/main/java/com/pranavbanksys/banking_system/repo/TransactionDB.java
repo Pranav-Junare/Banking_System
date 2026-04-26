@@ -8,4 +8,5 @@ public interface TransactionDB extends JpaRepository<TransactionDetails, String>
     boolean existsByTransactionID(String transactionID);
 
     List<TransactionDetails>findByFromUser(String email);
+    List<TransactionDetails> findByStatus(com.pranavbanksys.banking_system.enums.TransactionStatus status);
 }

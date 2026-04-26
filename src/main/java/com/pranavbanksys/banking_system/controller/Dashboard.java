@@ -1,7 +1,9 @@
 package com.pranavbanksys.banking_system.controller;
 
+import com.pranavbanksys.banking_system.repo.UserDB;
 import com.pranavbanksys.banking_system.repo.UserDetails;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,10 @@ import java.util.Map;
 
 
 @RestController
+@RequiredArgsConstructor
 public class Dashboard {
+
+    private final UserDB userDB;
 
 //    User Dashboard, show name and account balance
     @GetMapping("/dashboard")
@@ -27,8 +32,11 @@ public class Dashboard {
 
 //        Else display name and balance
         else {
-            UserDetails user = (UserDetails) sessionObj;
-            return ResponseEntity.ok(Map.of("name", user.getUName(),"balance",user.getAccountBalance()));
+            UserDetails sessionUser = (UserDetails) sessionObj;
+            UserDetails currentUser = userDB.findByuEmail(sessionUser.getUEmail());
+            if (currentUser == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error","User not found"));
+            session.setAttribute("currentUser", currentUser);
+            return ResponseEntity.ok(Map.of("name", currentUser.getUName(),"balance",currentUser.getAccountBalance()));
         }
     }
 

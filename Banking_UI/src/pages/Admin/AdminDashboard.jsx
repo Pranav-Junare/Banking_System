@@ -17,7 +17,8 @@ import { useAuth } from '../../context/AuthContext';
 import {
   adminAddMoney, getKycQueue, reviewKyc, getUserPortfolio,
   getOpenTickets, resolveTicket, getPendingLoans, approveLoan,
-  rejectLoan, getAllUsers, suspendUser, unsuspendUser
+  rejectLoan, getAllUsers, suspendUser, unsuspendUser,
+  getFlaggedTransactions, approveFlaggedTxn, rejectFlaggedTxn
 } from '../../api/api';
 import './Admin.css';
 
@@ -133,9 +134,9 @@ function OverviewDashboard({ adminName }) {
           <table className="admin-table">
             <thead><tr><th>Admin</th><th>Action</th><th>Target</th><th>Time</th></tr></thead>
             <tbody>
-              <tr><td><div className="admin-user-cell"><div className="admin-avatar">S</div><span>superadmin@pranavbank.com</span></div></td><td><span className="badge badge-red">FREEZE_ACCOUNT</span></td><td>UID-8439</td><td><span className="admin-time"><Clock size={12} /> 2 mins ago</span></td></tr>
-              <tr><td><div className="admin-user-cell"><div className="admin-avatar">C</div><span>compliance@pranavbank.com</span></div></td><td><span className="badge badge-green">APPROVE_KYC</span></td><td>UID-2391</td><td><span className="admin-time"><Clock size={12} /> 15 mins ago</span></td></tr>
-              <tr><td><div className="admin-user-cell"><div className="admin-avatar">S</div><span>support@pranavbank.com</span></div></td><td><span className="badge badge-blue">APPROVE_LOAN</span></td><td>LN-4412</td><td><span className="admin-time"><Clock size={12} /> 1 hour ago</span></td></tr>
+              <tr><td><div className="admin-user-cell"><div className="admin-avatar">S</div><span>superadmin@Bank.com</span></div></td><td><span className="badge badge-red">FREEZE_ACCOUNT</span></td><td>UID-8439</td><td><span className="admin-time"><Clock size={12} /> 2 mins ago</span></td></tr>
+              <tr><td><div className="admin-user-cell"><div className="admin-avatar">C</div><span>compliance@Bank.com</span></div></td><td><span className="badge badge-green">APPROVE_KYC</span></td><td>UID-2391</td><td><span className="admin-time"><Clock size={12} /> 15 mins ago</span></td></tr>
+              <tr><td><div className="admin-user-cell"><div className="admin-avatar">S</div><span>support@Bank.com</span></div></td><td><span className="badge badge-blue">APPROVE_LOAN</span></td><td>LN-4412</td><td><span className="admin-time"><Clock size={12} /> 1 hour ago</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -445,35 +446,45 @@ function UserManagement() {
    Transaction Review (Flagged Txns)
    ═══════════════════════════════════════════════════════════════════════ */
 function TransactionReview() {
-  const dummyTxns = [
-    { id: "TXN-99821", amount: "₹15,000", from: "UID-1022", to: "EXT-ACC-883", reason: "Velocity Spike", time: "10 mins ago" },
-    { id: "TXN-88432", amount: "₹25,500", from: "UID-3301", to: "EXT-ACC-441", reason: "Large Transfer", time: "30 mins ago" },
-    { id: "TXN-77219", amount: "₹12,800", from: "UID-5592", to: "UID-7788", reason: "New Payee + Large Amt", time: "1 hour ago" },
-    { id: "TXN-66108", amount: "₹50,000", from: "UID-7788", to: "EXT-ACC-992", reason: "Exceeds Daily Limit", time: "2 hours ago" },
-  ];
+  const [txns, setTxns] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { fetchFlaggedTxns(); }, []);
+  const fetchFlaggedTxns = async () => {
+    try { const res = await getFlaggedTransactions(); setTxns(res.data); } catch { } setLoading(false);
+  };
+
+  const handleApprove = async (id) => {
+    try { await approveFlaggedTxn(id); fetchFlaggedTxns(); } catch (err) { alert(err.response?.data?.error || err.message); }
+  };
+  const handleReject = async (id) => {
+    try { await rejectFlaggedTxn(id); fetchFlaggedTxns(); } catch (err) { alert(err.response?.data?.error || err.message); }
+  };
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
       <div className="admin-header">
         <div className="admin-header-text"><h1>Flagged Transactions</h1><p>Review and process flagged high-value or suspicious transfers.</p></div>
-        <span className="badge badge-red" style={{ fontSize: '0.85rem', padding: '0.4rem 1rem' }}>{dummyTxns.length} Flagged</span>
+        <span className="badge badge-red" style={{ fontSize: '0.85rem', padding: '0.4rem 1rem' }}>{txns.length} Flagged</span>
       </div>
       <div className="admin-table-wrap">
         <table className="admin-table">
           <thead><tr><th>Txn ID</th><th>Amount</th><th>From</th><th>To</th><th>Flag Reason</th><th>Time</th><th>Actions</th></tr></thead>
           <tbody>
-            {dummyTxns.map((txn) => (
-              <tr key={txn.id}>
-                <td><strong>{txn.id}</strong></td>
-                <td className="admin-amount-danger">{txn.amount}</td>
-                <td>{txn.from}</td>
-                <td>{txn.to}</td>
-                <td><span className="badge badge-red">{txn.reason}</span></td>
-                <td><span className="admin-time"><Clock size={12} /> {txn.time}</span></td>
+            {loading ? <tr><td colSpan="7" style={{textAlign:"center", padding:"2rem"}}><span className="spinner" /></td></tr> :
+             txns.length === 0 ? <tr><td colSpan="7" style={{textAlign:"center", padding:"2rem"}}>No flagged transactions.</td></tr> :
+             txns.map((txn) => (
+              <tr key={txn.transactionID}>
+                <td><strong>{txn.transactionID}</strong></td>
+                <td className="admin-amount-danger">₹{Number(txn.amount).toLocaleString('en-IN')}</td>
+                <td>{txn.fromUser}</td>
+                <td>{txn.toUser}</td>
+                <td><span className="badge badge-red">{txn.flaggedReason}</span></td>
+                <td><span className="admin-time"><Clock size={12} /> Pending</span></td>
                 <td>
                   <div className="admin-action-btns">
-                    <button className="btn-approve"><CheckCircle2 size={14} /> Clear</button>
-                    <button className="btn-reject"><XCircle size={14} /> Reverse</button>
+                    <button className="btn-approve" onClick={() => handleApprove(txn.transactionID)}><CheckCircle2 size={14} /> Clear</button>
+                    <button className="btn-reject" onClick={() => handleReject(txn.transactionID)}><XCircle size={14} /> Reverse</button>
                   </div>
                 </td>
               </tr>

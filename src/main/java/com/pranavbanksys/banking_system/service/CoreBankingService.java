@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class CoreBankingService {
 
     private final UserDB userDB;
     private final TransactionDB transactionDB;
+    private final TransactionIdGen transactionIdGen;
     private final CurrencyWalletDB currencyWalletDB;
     private final BankServiceRequestDB bankServiceRequestDB;
 
@@ -27,15 +29,21 @@ public class CoreBankingService {
     // --- Statement Generation ---
     public String generateStatementCSV(String email) {
         List<TransactionDetails> transactions = transactionDB.findByFromUser(email);
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         StringBuilder csvBuilder = new StringBuilder();
-        csvBuilder.append("TransactionID,FromUser,ToUser,Amount\n");
+        csvBuilder.append("TransactionID,FromUser,ToUser,Amount,Date,Time\n");
 
         for (TransactionDetails t : transactions) {
+            String txnDate = t.getTransactionDateTime() != null ? t.getTransactionDateTime().format(dateFmt) : "";
+            String txnTime = t.getTransactionDateTime() != null ? t.getTransactionDateTime().format(timeFmt) : "";
             csvBuilder.append(t.getTransactionID()).append(",")
                     .append(t.getFromUser()).append(",")
                     .append(t.getToUser()).append(",")
-                    .append(t.getAmount()).append("\n");
+                    .append(t.getAmount()).append(",")
+                    .append(txnDate).append(",")
+                    .append(txnTime).append("\n");
         }
 
         return csvBuilder.toString();
@@ -49,6 +57,8 @@ public class CoreBankingService {
         if (user == null || balance < Math.round(amountINR)) {
             throw new IllegalArgumentException("Insufficient INR balance for conversion");
         }
+
+        String normalizedCurrency = targetCurrency.toUpperCase();
 
         // Deduct INR
         user.setAccountBalance(balance - Math.round(amountINR));
@@ -66,8 +76,7 @@ public class CoreBankingService {
         });
 
         // Conversion logic
-        targetCurrency = targetCurrency.toUpperCase();
-        switch (targetCurrency) {
+        switch (normalizedCurrency) {
             case "USD":
                 wallet.setUsdBalance(wallet.getUsdBalance() + (amountINR * INR_TO_USD));
                 break;
@@ -78,8 +87,15 @@ public class CoreBankingService {
                 wallet.setGbpBalance(wallet.getGbpBalance() + (amountINR * INR_TO_GBP));
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported currency: " + targetCurrency);
+                throw new IllegalArgumentException("Unsupported currency: " + normalizedCurrency);
         }
+
+        TransactionDetails forexTxn = new TransactionDetails();
+        forexTxn.setTransactionID(transactionIdGen.createNewTransaction());
+        forexTxn.setFromUser(email);
+        forexTxn.setToUser("FOREX_" + normalizedCurrency);
+        forexTxn.setAmount(Math.round(amountINR));
+        transactionDB.save(forexTxn);
 
         return currencyWalletDB.save(wallet);
     }

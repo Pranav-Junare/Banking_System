@@ -10,7 +10,7 @@ import { motion } from 'framer-motion'; /* Animation library for transitions */
 import { forexConvert, getForexWallet, downloadStatement } from '../../api/api'; /* Forex API functions */
 import { Globe, ArrowRightLeft, Download, Wallet, TrendingUp } from 'lucide-react'; /* Icon components */
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import './Forex.css'; /* Forex page specific styles */
 
 /* ─── Currency Flags Mapping ─────────────────────────────────────────
@@ -93,28 +93,42 @@ export default function ForexPage() {
   const handleDownload = async () => {
     try {
       const res = await downloadStatement(); /* Get CSV string */
-      let csvStr = res.data;
-      if (typeof csvStr === 'string') {
-        const doc = new jsPDF();
-        const lines = csvStr.trim().split(/\r?\n/);
-        const headers = lines[0].split(',');
-        const dataRows = lines.slice(1).map(line => line.split(','));
+      const csvStr = (res.data || '').toString().trim();
+      const doc = new jsPDF();
 
-        doc.text("PranavBank - Account Statement", 14, 15);
-        if (dataRows.length > 0) {
-          doc.autoTable({
-            startY: 20,
-            head: [headers],
-            body: dataRows,
-          });
-        } else {
-          doc.text("No transactions found.", 14, 25);
-        }
-        doc.save('statement.pdf');
-        setMsg({ type: 'success', text: 'Statement PDF downloaded!' });
+      doc.setFontSize(14);
+      doc.text('Bank - Account Statement', 14, 15);
+
+      const walletRows = Object.entries(wallet || EMPTY_WALLET)
+        .filter(([k]) => k !== 'inr')
+        .map(([currency, balance]) => [currency.toUpperCase(), Number(balance || 0).toFixed(2)]);
+
+      autoTable(doc, {
+        startY: 20,
+        head: [['Currency', 'Balance']],
+        body: walletRows,
+        theme: 'grid',
+      });
+
+      const lines = csvStr ? csvStr.split(/\r?\n/).filter(Boolean) : [];
+      const headers = (lines[0] || '').split(',').map(h => h.trim());
+      const dataRows = lines.slice(1).map(line => line.split(',').map(v => v.trim()));
+
+      if (dataRows.length > 0 && headers.length > 0 && headers[0] !== '') {
+        autoTable(doc, {
+          startY: doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 70,
+          head: [headers],
+          body: dataRows,
+          theme: 'striped',
+        });
       } else {
-        setMsg({ type: 'error', text: 'Invalid response format' });
+        const y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 70;
+        doc.setFontSize(11);
+        doc.text('No recent transaction rows available.', 14, y);
       }
+
+      doc.save('statement.pdf');
+      setMsg({ type: 'success', text: 'Statement PDF downloaded!' });
     } catch {
       setMsg({ type: 'error', text: 'Download failed' });
     }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.pranavbanksys.banking_system.repo.TransactionDetails;
 
 import java.util.Map;
 
@@ -39,12 +40,13 @@ public class SendMoney {
 
 //            Ye SendMoneyService.java file mai jayega aur transaction execute karega
             UserDetails receiver=sendMoneyService.doesExists(receiverEmail);
-            sendMoneyService.processTransaction(sender, receiver, sendAmount);
+            TransactionDetails txnDetails = sendMoneyService.processTransaction(sender, receiver, sendAmount);
 
 //            Ye bas show karega ke the transaction has worked and kita balance hai vo show karega
             return  ResponseEntity.ok(Map.of(
                     "sendAmount", sendAmount,
-                    "receiverName",receiver.getUName()
+                    "receiverName",receiver.getUName(),
+                    "status", txnDetails.getStatus().name()
             ));
         }
 

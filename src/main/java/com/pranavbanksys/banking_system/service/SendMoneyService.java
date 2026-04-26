@@ -31,7 +31,7 @@ public class SendMoneyService {
 //    Executes it as 1 block
     @Transactional
 //    Receives the sender, receiver details and the amount to send
-    public void processTransaction(UserDetails sender, UserDetails receiver, int sendAmount ){
+    public TransactionDetails processTransaction(UserDetails sender, UserDetails receiver, int sendAmount ){
 
 //        If balance is lower than the send amount return error
         if(sender.getAccountBalance()<sendAmount) throw new IllegalStateException( "Insufficient Funds");
@@ -45,14 +45,28 @@ public class SendMoneyService {
         transactionDetails.setToUser(receiver.getUEmail());
         transactionDetails.setAmount((long)sendAmount);
 
-//        Setting the sender and receiver balance
-        sender.setAccountBalance(sender.getAccountBalance()-sendAmount);
-        receiver.setAccountBalance(receiver.getAccountBalance()+sendAmount);
+        if (sendAmount > 50000) {
+            transactionDetails.setStatus(com.pranavbanksys.banking_system.enums.TransactionStatus.PENDING_REVIEW);
+            transactionDetails.setFlaggedReason("Amount exceeds 50000");
+            
+//            Setting the sender balance (deduct only)
+            sender.setAccountBalance(sender.getAccountBalance()-sendAmount);
+            
+//            Saving everything to the DB
+            userDB.save(sender);
+            transactionDB.save(transactionDetails);
+            return transactionDetails;
+        } else {
+//            Setting the sender and receiver balance
+            sender.setAccountBalance(sender.getAccountBalance()-sendAmount);
+            receiver.setAccountBalance(receiver.getAccountBalance()+sendAmount);
 
-//        Saving everything to the DB
-        userDB.save(sender);
-        userDB.save(receiver);
+//            Saving everything to the DB
+            userDB.save(sender);
+            userDB.save(receiver);
+            transactionDB.save(transactionDetails);
 
-        transactionDB.save(transactionDetails);
+            return transactionDetails;
+        }
     }
 }

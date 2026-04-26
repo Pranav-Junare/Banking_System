@@ -51,11 +51,13 @@ public class History {
 
 //            If receiverDetails are null write name as unknown or their name
             String receiverName=(receiverDetails!=null)?receiverDetails.getUName():"Unknown User";
-            reactDataList.add(Map.of(
-                    "transactionId", transactionDetails.getTransactionID(),
-                    "receiverName", receiverName,
-                    "amount", transactionDetails.getAmount()
-            ));
+            Map<String, Object> map = new java.util.HashMap<>();
+            map.put("transactionId", transactionDetails.getTransactionID());
+            map.put("receiverName", receiverName);
+            map.put("amount", transactionDetails.getAmount());
+            map.put("status", transactionDetails.getStatus() != null ? transactionDetails.getStatus().name() : null);
+            map.put("flaggedReason", transactionDetails.getFlaggedReason());
+            reactDataList.add(map);
 
         }
 //        Return the stringBuilder as string

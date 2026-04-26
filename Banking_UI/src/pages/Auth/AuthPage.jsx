@@ -146,7 +146,7 @@ export default function AuthPage() {
             {/* Bank logo with rupee icon */}
             <div className="auth-logo">
               <div className="auth-logo-icon">₹</div>   {/* Rupee symbol icon */}
-              <span>PranavBank</span>                    {/* Bank name */}
+              <span>Bank</span>                    {/* Bank name */}
             </div>
 
             {/* Hero headline and description */}
@@ -161,7 +161,7 @@ export default function AuthPage() {
             >
               <div className="preview-card-chip" />                    {/* Gold chip graphic */}
               <div className="preview-card-number">•••• •••• •••• 4832</div> {/* Masked card number */}
-              <div className="preview-card-name">PranavBank</div>      {/* Card holder name */}
+              <div className="preview-card-name">Bank</div>      {/* Card holder name */}
               <div className="preview-card-contactless">)))</div>      {/* Contactless symbol */}
             </motion.div>
           </motion.div>

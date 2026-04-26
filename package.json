@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Pranav-Junare/Banking_System#readme",
   "dependencies": {
     "jspdf": "^4.2.1",
-    "jspdf-autotable": "^5.0.7"
+    "jspdf-autotable": "^5.0.7",
+    "pptxgenjs": "^4.0.1"
   }
 }

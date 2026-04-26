@@ -187,7 +187,7 @@ export const getForexWallet = () => API.get('/api/core/forex/my-wallet');
 
 /* Download the user's account statement as a text file */
 export const downloadStatement = () =>
-  API.get('/api/core/statement');
+  API.get('/api/core/statement', { responseType: 'text' });
 
 /* ═══════════════════════════════════════════════════════════════════════
    KYC APIs
@@ -239,6 +239,10 @@ export const getAllUsers = () => API.get('/api/admin/users');
 export const suspendUser = (email) => API.post(`/api/admin/user/${email}/suspend`);
 export const unsuspendUser = (email) => API.post(`/api/admin/user/${email}/unsuspend`);
 
+// ─── ADMIN FLAGGED TRANSACTIONS ──────────────────────────────────
+export const getFlaggedTransactions = () => API.get('/api/admin/flagged-txns');
+export const approveFlaggedTxn = (txnId) => API.post(`/api/admin/flagged-txns/${txnId}/approve`);
+export const rejectFlaggedTxn = (txnId) => API.post(`/api/admin/flagged-txns/${txnId}/reject`);
 
 /* Export the Axios instance for direct use if needed */
 export default API;

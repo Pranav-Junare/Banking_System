@@ -120,7 +120,7 @@ function Card3D({ card, onRefresh }) {
             )}
             {/* Top row — brand name and contactless symbol */}
             <div className="card-top-row">
-              <span className="card-brand">PranavBank</span>
+              <span className="card-brand">Bank</span>
               <span className="card-contactless">)))</span>
             </div>
             {/* Chip graphic */}
@@ -150,7 +150,7 @@ function Card3D({ card, onRefresh }) {
               <span className="card-cvv">{card.cvv || '•••'}</span>
             </div>
             {/* Disclaimer text */}
-            <p className="card-back-text">This card is property of PranavBank. Tap to flip back.</p>
+            <p className="card-back-text">This card is property of Bank. Tap to flip back.</p>
           </div>
         </motion.div>
       </div>

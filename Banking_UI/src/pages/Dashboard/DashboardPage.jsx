@@ -20,6 +20,8 @@ import {
   AlertTriangle,     /* Icon for report fraud */
   Download           /* Icon for download statement */
 } from 'lucide-react'; /* Lucide React icon library */
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { useNavigate } from 'react-router-dom'; /* Hook for navigation to other pages */
 import './Dashboard.css'; /* Dashboard page specific styles */
 
@@ -248,7 +250,12 @@ export default function DashboardPage() {
               <span>Send money to see your history here</span>
             </div>
           ) : (
-            transactions.slice(0, 6).map((tx, i) => (
+            transactions.slice(0, 6).map((tx, i) => {
+              const isPending = tx.status === 'PENDING_REVIEW' || tx.status === 'PENDING';
+              const isRejected = tx.status === 'REVERSED' || tx.status === 'REJECTED';
+              const isApproved = tx.status === 'CLEARED';
+
+              return (
               <motion.div
                 key={tx.transactionId || i}
                 className="transaction-item"
@@ -256,16 +263,22 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
               >
-                <div className="tx-avatar">
+                <div className="tx-avatar" style={isRejected ? { background: 'var(--accent-success)' } : {}}>
                   {tx.receiverName?.charAt(0)?.toUpperCase() || '?'}
                 </div>
                 <div className="tx-details">
-                  <span className="tx-name">{tx.receiverName || 'Unknown'}</span>
-                  <span className="tx-id">TXN #{tx.transactionId}</span>
+                  <span className="tx-name">{tx.receiverName || 'Unknown'} {isRejected && '(Refunded)'}</span>
+                  <span className="tx-id">
+                    TXN #{tx.transactionId} 
+                    {isPending && <span style={{ color: 'var(--accent-warning)', marginLeft: '4px', fontSize: '0.75rem' }}>- Pending Review</span>}
+                    {isApproved && <span style={{ color: 'var(--accent-success)', marginLeft: '4px', fontSize: '0.75rem' }}>- Approved (Transferred)</span>}
+                    {isRejected && <span style={{ color: 'var(--accent-danger)', marginLeft: '4px', fontSize: '0.75rem' }}>- Rejected</span>}
+                  </span>
                 </div>
-                <span className="tx-amount sent">
-                  -₹{Number(tx.amount).toLocaleString('en-IN')}
+                <span className={`tx-amount ${isRejected ? 'received' : 'sent'} ${isPending ? 'pending-amount' : ''}`}>
+                  {isRejected ? '+' : '-'}₹{Number(tx.amount).toLocaleString('en-IN')}
                 </span>
+                {(!isRejected && !isPending && !isApproved) && (
                 <button
                   className="btn-report-fraud"
                   title="Report Fraud"
@@ -280,8 +293,9 @@ export default function DashboardPage() {
                 >
                   <AlertTriangle size={12} /> Report
                 </button>
+                )}
               </motion.div>
-            ))
+            )})
           )}
         </div>
         {/* Download Statement Button */}
@@ -291,13 +305,29 @@ export default function DashboardPage() {
             onClick={async () => {
               try {
                 const res = await downloadStatement();
-                const blob = new Blob([res.data], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'pranavbank_statement.txt';
-                a.click();
-                window.URL.revokeObjectURL(url);
+                const csvStr = (res.data || '').toString().trim();
+                if (!csvStr) throw new Error('Empty statement response');
+
+                const lines = csvStr.split(/\r?\n/).filter(Boolean);
+                const headers = (lines[0] || '').split(',').map(h => h.trim());
+                const dataRows = lines.slice(1).map(line => line.split(',').map(v => v.trim()));
+
+                const doc = new jsPDF();
+                doc.setFontSize(14);
+                doc.text('Bank Account Statement', 14, 15);
+
+                if (dataRows.length > 0 && headers.length > 0 && headers[0] !== '') {
+                  autoTable(doc, {
+                    startY: 22,
+                    head: [headers],
+                    body: dataRows,
+                  });
+                } else {
+                  doc.setFontSize(11);
+                  doc.text('No transactions found for this account.', 14, 28);
+                }
+
+                doc.save('Bank_statement.pdf');
               } catch { alert('Failed to download statement.'); }
             }}
             style={{ fontSize: '0.85rem' }}

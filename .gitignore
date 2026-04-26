@@ -31,3 +31,5 @@ src/main/resources/application.properties
 
 # Test scripts
 test_all_features.ps1
+# Added by code-review-graph
+.code-review-graph/

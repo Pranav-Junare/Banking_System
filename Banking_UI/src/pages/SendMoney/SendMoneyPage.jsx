@@ -5,9 +5,9 @@
    with dummy data for demonstration when the API is offline.
    ═══════════════════════════════════════════════════════════════════════ */
 
-import { useState } from 'react'; /* React useState hook for form state */
+import { useState, useEffect } from 'react'; /* React useState hook for form state */
 import { motion } from 'framer-motion'; /* Animation library for transitions */
-import { sendMoney } from '../../api/api'; /* API function for money transfer */
+import { sendMoney, getHistory } from '../../api/api'; /* API function for money transfer */
 import { Send, ArrowRight, CheckCircle, Clock } from 'lucide-react'; /* Icon components */
 import './SendMoney.css'; /* SendMoney page specific styles */
 
@@ -16,10 +16,10 @@ import './SendMoney.css'; /* SendMoney page specific styles */
    Provides a realistic preview of past transfers.
    ───────────────────────────────────────────────────────────────────── */
 const DUMMY_RECENT_TRANSFERS = [
-  { name: 'Rahul Sharma', email: 'rahul@example.com', amount: 2500, time: '2 hours ago' },
-  { name: 'Priya Patel', email: 'priya@example.com', amount: 1800, time: 'Yesterday' },
-  { name: 'Amit Kumar', email: 'amit@example.com', amount: 5000, time: '2 days ago' },
-  { name: 'Neha Singh', email: 'neha@example.com', amount: 3200, time: '3 days ago' },
+  { receiverName: 'Rahul Sharma', receiverEmail: 'rahul@example.com', amount: 2500, time: '2 hours ago' },
+  { receiverName: 'Priya Patel', receiverEmail: 'priya@example.com', amount: 1800, time: 'Yesterday' },
+  { receiverName: 'Amit Kumar', receiverEmail: 'amit@example.com', amount: 5000, time: '2 days ago' },
+  { receiverName: 'Neha Singh', receiverEmail: 'neha@example.com', amount: 3200, time: '3 days ago' },
 ];
 
 /* ─── SendMoneyPage Component ────────────────────────────────────────
@@ -35,11 +35,35 @@ export default function SendMoneyPage() {
   /* Loading state — shows spinner while transfer is processing */
   const [loading, setLoading] = useState(false);
 
+  /* State for the transaction history array */
+  const [transactions, setTransactions] = useState([]);
+
   /* Result object — holds the API response after a successful transfer */
   const [result, setResult] = useState(null);
 
   /* Error message string — displayed when transfer fails */
   const [error, setError] = useState('');
+
+  /* ─── Fetch Recent Transfers on Mount ──────────────────────────────
+     Gets the transaction history to display recent transfers below.
+     ─────────────────────────────────────────────────────────────── */
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
+  const fetchHistory = async () => {
+    try {
+      const histRes = await getHistory();
+      if (histRes.data && histRes.data.length > 0) {
+        // Dashboard shows history without filter since the backend history endpoint returns fromUser transactions
+        setTransactions(histRes.data);
+      } else {
+        setTransactions(DUMMY_RECENT_TRANSFERS);
+      }
+    } catch (err) {
+      setTransactions(DUMMY_RECENT_TRANSFERS);
+    }
+  };
 
   /* ─── Send Money Handler ─────────────────────────────────────────
      Calls the sendMoney API with the email and amount.
@@ -56,6 +80,7 @@ export default function SendMoneyPage() {
       setResult(res.data); /* Store successful result */
       setEmail('');         /* Clear email field */
       setAmount('');        /* Clear amount field */
+      fetchHistory();       /* Refresh the history after sending */
     } catch (err) {
       /* Extract and display the error message from the API response */
       setError(err.response?.data?.error || 'Transfer failed');
@@ -69,7 +94,7 @@ export default function SendMoneyPage() {
       {/* Page title */}
       <h1>Send Money</h1>
       {/* Page description */}
-      <p className="page-subtitle">Transfer funds instantly to any PranavBank account.</p>
+      <p className="page-subtitle">Transfer funds instantly to any Bank account.</p>
 
       <div className="send-container">
         {/* ── Transfer Form Card ── */}
@@ -119,47 +144,73 @@ export default function SendMoneyPage() {
           </form>
         </div>
 
-        {/* ── Success Confirmation Card ── */}
-        {/* Shown after a successful transfer with amount and receiver info */}
+        {/* ── Success / Pending Confirmation Card ── */}
+        {/* Shown after a successful transfer or pending review with amount and receiver info */}
         {result && (
           <motion.div
-            className="send-success glass-card"
+            className={`send-success glass-card ${result.status === 'PENDING_REVIEW' ? 'pending' : ''}`}
             initial={{ opacity: 0, scale: 0.9 }} /* Start small and hidden */
             animate={{ opacity: 1, scale: 1 }}   /* Grow and fade in */
           >
-            <CheckCircle size={48} color="var(--accent-success)" /> {/* Green check icon */}
-            <h3>Transfer Successful!</h3>
-            <p className="success-amount">₹{Number(result.sendAmount).toLocaleString('en-IN')}</p>
-            <p className="success-to">sent to <strong>{result.receiverName}</strong></p>
+            {result.status === 'PENDING_REVIEW' ? (
+              <>
+                <Clock size={48} color="var(--accent-warning, #f1c40f)" />
+                <h3>Pending Review</h3>
+                <p className="success-amount">₹{Number(result.sendAmount).toLocaleString('en-IN')}</p>
+                <p className="success-to">transfer to <strong>{result.receiverName}</strong></p>
+                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                  This amount exceeds the limit and requires admin approval.
+                </p>
+              </>
+            ) : (
+              <>
+                <CheckCircle size={48} color="var(--accent-success)" /> {/* Green check icon */}
+                <h3>Transfer Successful!</h3>
+                <p className="success-amount">₹{Number(result.sendAmount).toLocaleString('en-IN')}</p>
+                <p className="success-to">sent to <strong>{result.receiverName}</strong></p>
+              </>
+            )}
           </motion.div>
         )}
 
         {/* ── Recent Transfers Section ── */}
-        {/* Shows dummy recent transfer history for demonstration */}
+        {/* Shows actual or dummy recent transfer history for demonstration */}
         <div className="recent-transfers">
           <h3>Recent Transfers</h3>
-          <div className="glass-card transfers-list">
-            {DUMMY_RECENT_TRANSFERS.map((tx, i) => (
+          <div className="glass-card transfers-list transactions-list">
+            {transactions.slice(0, 5).map((tx, i) => {
+              const isPending = tx.status === 'PENDING_REVIEW' || tx.status === 'PENDING';
+              const isRejected = tx.status === 'REVERSED' || tx.status === 'REJECTED';
+              const isApproved = tx.status === 'CLEARED';
+
+              return (
               <motion.div
-                key={i}
-                className="transfer-item"
+                key={tx.transactionId || i}
+                className="transaction-item"
                 initial={{ opacity: 0, x: -20 }} /* Start hidden and shifted left */
                 animate={{ opacity: 1, x: 0 }}  /* Slide in from left */
                 transition={{ delay: i * 0.05 }} /* Stagger each item */
               >
                 {/* Avatar with first letter */}
-                <div className="tx-avatar">{tx.name.charAt(0)}</div>
+                <div className="tx-avatar" style={isRejected ? { background: 'var(--accent-success)' } : {}}>{tx.receiverName?.charAt(0)?.toUpperCase() || '?'}</div>
                 {/* Transfer details */}
-                <div className="transfer-details">
-                  <span className="transfer-name">{tx.name}</span>
-                  <span className="transfer-meta">
-                    <Clock size={12} /> {tx.time}
+                <div className="tx-details">
+                  <span className="tx-name">
+                    {tx.receiverName || 'Unknown'} {isRejected && '(Refund)'}
+                  </span>
+                  <span className="tx-id">
+                    {tx.transactionId ? `TXN #${tx.transactionId}` : (tx.time || 'Recent')}
+                    {isPending && <span style={{ color: 'var(--accent-warning)', marginLeft: '4px', fontSize: '0.75rem' }}>- Pending Review</span>}
+                    {isApproved && <span style={{ color: 'var(--accent-success)', marginLeft: '4px', fontSize: '0.75rem' }}>- Approved (Transferred)</span>}
+                    {isRejected && <span style={{ color: 'var(--accent-danger)', marginLeft: '4px', fontSize: '0.75rem' }}>- Rejected</span>}
                   </span>
                 </div>
                 {/* Transfer amount */}
-                <span className="tx-amount sent">-₹{tx.amount.toLocaleString('en-IN')}</span>
+                <span className={`tx-amount ${isRejected ? 'received' : 'sent'} ${isPending ? 'pending-amount' : ''}`}>
+                  {isRejected ? '+' : '-'}₹{Number(tx.amount).toLocaleString('en-IN')}
+                </span>
               </motion.div>
-            ))}
+            )})}
           </div>
         </div>
       </div>
